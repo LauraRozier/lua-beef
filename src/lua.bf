@@ -2,6 +2,9 @@
 ** $Id: lua.bf
 ** Lua - A Scripting Language
 ** Lua.org, PUC-Rio, Brazil (http://www.lua.org)
+**
+** Ported by Thibmo (https://github.com/thibmo/lua535-beef)
+**
 ** See Copyright Notice at the end of this file
 */
 using System;
