@@ -586,15 +586,15 @@ namespace lua535_beef
 		** access functions (stack -> C)
 		*/
 		[LinkName("lua_isnumber"), CLink]
-		public extern static int32 isnumber(lua_State* L, int32 idx);
+		public extern static bool isnumber(lua_State* L, int32 idx);
 		[LinkName("lua_isstring"), CLink]
-		public extern static int32 isstring(lua_State* L, int32 idx);
+		public extern static bool isstring(lua_State* L, int32 idx);
 		[LinkName("lua_iscfunction"), CLink]
-		public extern static int32 iscfunction(lua_State* L, int32 idx);
+		public extern static bool iscfunction(lua_State* L, int32 idx);
 		[LinkName("lua_isinteger"), CLink]
-		public extern static int32 isinteger(lua_State* L, int32 idx);
+		public extern static bool isinteger(lua_State* L, int32 idx);
 		[LinkName("lua_isuserdata"), CLink]
-		public extern static int32 isuserdata(lua_State* L, int32 idx);
+		public extern static bool isuserdata(lua_State* L, int32 idx);
 		[LinkName("lua_type"), CLink]
 		public extern static int32 type(lua_State* L, int32 idx);
 		[LinkName("lua_typename"), CLink]
@@ -605,7 +605,7 @@ namespace lua535_beef
 		[LinkName("lua_tointegerx"), CLink]
 		public extern static lua_Integer tointegerx(lua_State* L, int32 idx, bool* isnum);
 		[LinkName("lua_tolstring"), CLink]
-		public extern static int32 toboolean(lua_State* L, int32 idx);
+		public extern static bool toboolean(lua_State* L, int32 idx);
 		[LinkName("lua_tolstring"), CLink]
 		public extern static char8* tolstring(lua_State* L, int32 idx, size_t* len);
 		[LinkName("lua_rawlen"), CLink]
