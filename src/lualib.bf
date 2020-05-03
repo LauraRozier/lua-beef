@@ -12,51 +12,51 @@ namespace lua535_beef
 		/* version suffix for environment variable names */
 		public const String VERSUFFIX = "_" + lua.VERSION_MAJOR + "_" + lua.VERSION_MINOR;
 
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_base(lua_State* L);
 
 		public const String COLIBNAME = "coroutine";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_coroutine(lua_State* L);
 
 		public const String TABLIBNAME = "table";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_table(lua_State* L);
 
 		public const String IOLIBNAME = "io";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_io(lua_State* L);
 
 		public const String OSLIBNAME = "os";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_os(lua_State* L);
 
 		public const String STRLIBNAME = "string";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_string(lua_State* L);
 
 		public const String UTF8LIBNAME = "utf8";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_utf8(lua_State* L);
 
 		public const String BITLIBNAME = "bit32";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_bit32(lua_State* L);
 
 		public const String MATHLIBNAME = "math";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_math(lua_State* L);
 
 		public const String DBLIBNAME = "debug";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_debug(lua_State* L);
 
 		public const String LOADLIBNAME = "package";
-		[CLink]
+		[Import(lua.LIB_DLL), CLink]
 		public static extern int32 luaopen_package(lua_State* L);
 
 		/* open all previous libraries */
-		[LinkName("luaL_openlibs"), CLink]
+		[Import(lua.LIB_DLL), LinkName("luaL_openlibs")]
 		public static extern void openlibs(lua_State* L);
 
 		[Inline]
