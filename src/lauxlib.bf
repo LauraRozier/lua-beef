@@ -215,8 +215,13 @@ namespace lua535_beef
 
 		[Inline]
 		public static int32 dofile(lua_State* L, String fn)
-		{
-			return loadfile(L, fn) | lua.pcall(L, 0, lua.MULTRET, 0);
+		{ 
+			let res = loadfile(L, fn);
+
+			if (res == lua.OK)
+				return lua.pcall(L, 0, lua.MULTRET, 0);
+
+			return res;
 		}
  
 		[Inline]
