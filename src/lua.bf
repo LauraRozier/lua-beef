@@ -210,34 +210,27 @@ namespace lua535_beef
 	/*
 	** Functions to be called by the debugger in specific events
 	*/
-	[CRepr]
 	public typealias lua_Hook = function void(lua_State* L, int32 status, lua_KContext ctx);
 
 	/*
 	** Type for C functions registered with Lua
 	*/
-	[CRepr]
 	public typealias lua_CFunction = function int32(lua_State* L);
 
 	/*
 	** Type for continuation functions
 	*/ 
-	[CRepr]
 	public typealias lua_KFunction = function int32(lua_State* L);
 
 	/*
 	** Type for functions that read/write blocks when loading/dumping Lua chunks
 	*/
-	[CRepr]
 	public typealias lua_Reader = function char8*(lua_State* L, void* ud, size_t* sz);
-
-	[CRepr]
 	public typealias lua_Writer = function int(lua_State* L, void* p, size_t sz, void* ud);
 
 	/*
 	** Type for memory-allocation functions
 	*/
-	[CRepr]
 	public typealias lua_Alloc = function void*(void* ud, void* ptr, size_t osize, size_t nsize);
 
 	[CRepr]
