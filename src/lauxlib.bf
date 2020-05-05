@@ -55,7 +55,7 @@ namespace lua535_beef
 	public static class lauxlib
 	{
 		/* extra error code for 'luaL_loadfilex' */
-		public const int32 ERRFILE        = lua.ERRERR + 1;
+		public const int ERRFILE          = lua.ERRERR + 1;
 
 		/* key, in the registry, for table of loaded modules */
 		public const String LOADED_TABLE  = "_LOADED";
@@ -63,7 +63,7 @@ namespace lua535_beef
 		/* key, in the registry, for table of preloaded loaders */
 		public const String PRELOAD_TABLE = "_PRELOAD";
 
-		public const int32 NUMSIZES       = sizeof(lua_Integer) * 16 + sizeof(lua_Number);
+		public const int NUMSIZES         = sizeof(lua_Integer) * 16 + sizeof(lua_Number);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_checkversion_")]
 		public static extern void checkversion_(lua_State* L, lua_Number ver, size_t sz);
@@ -74,96 +74,96 @@ namespace lua535_beef
 		}
 
 		[Import(lua.LIB_DLL), LinkName("luaL_getmetafield")]
-		public static extern int32 getmetafield(lua_State* L, int32 obj, char8* e);
+		public static extern int getmetafield(lua_State* L, int obj, char8* e);
 		[Import(lua.LIB_DLL), LinkName("luaL_callmeta")]
-		public static extern int32 callmeta(lua_State* L, int32 obj, char8* e);
+		public static extern int callmeta(lua_State* L, int obj, char8* e);
 		[Import(lua.LIB_DLL), LinkName("luaL_tolstring")]
-		public static extern char8* tolstring(lua_State* L, int32 idx, size_t *len);
+		public static extern char8* tolstring(lua_State* L, int idx, size_t *len);
 		[Import(lua.LIB_DLL), LinkName("luaL_argerror")]
-		public static extern int32 argerror(lua_State* L, int32 arg, char8* extramsg);
+		public static extern int argerror(lua_State* L, int arg, char8* extramsg);
 		[Import(lua.LIB_DLL), LinkName("luaL_checklstring")]
-		public static extern char8* checklstring(lua_State* L, int32 arg, size_t *l);
+		public static extern char8* checklstring(lua_State* L, int arg, size_t *l);
 		[Import(lua.LIB_DLL), LinkName("luaL_optlstring")]
-		public static extern char8* optlstring(lua_State* L, int32 arg, char8* def, size_t *l);
+		public static extern char8* optlstring(lua_State* L, int arg, char8* def, size_t *l);
 		[Import(lua.LIB_DLL), LinkName("luaL_checknumber")]
-		public static extern lua_Number checknumber(lua_State* L, int32 arg);
+		public static extern lua_Number checknumber(lua_State* L, int arg);
 		[Import(lua.LIB_DLL), LinkName("luaL_optnumber")]
-		public static extern lua_Number optnumber(lua_State* L, int32 arg, lua_Number def);
+		public static extern lua_Number optnumber(lua_State* L, int arg, lua_Number def);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_checkinteger")]
-		public static extern lua_Integer checkinteger(lua_State* L, int32 arg);
+		public static extern lua_Integer checkinteger(lua_State* L, int arg);
 		[Import(lua.LIB_DLL), LinkName("luaL_optinteger")]
-		public static extern lua_Integer optinteger(lua_State* L, int32 arg, lua_Integer def);
+		public static extern lua_Integer optinteger(lua_State* L, int arg, lua_Integer def);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_checkstack")]
-		public static extern void checkstack(lua_State* L, int32 sz, char8* msg);
+		public static extern void checkstack(lua_State* L, int sz, char8* msg);
 		[Import(lua.LIB_DLL), LinkName("luaL_checktype")]
-		public static extern void checktype(lua_State* L, int32 arg, int32 t);
+		public static extern void checktype(lua_State* L, int arg, int t);
 		[Import(lua.LIB_DLL), LinkName("luaL_checkany")]
-		public static extern void checkany(lua_State* L, int32 arg);
+		public static extern void checkany(lua_State* L, int arg);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_newmetatable")]
-		public static extern int32 newmetatable(lua_State* L, char8* tname);
+		public static extern int newmetatable(lua_State* L, char8* tname);
 		[Import(lua.LIB_DLL), LinkName("luaL_setmetatable")]
 		public static extern void setmetatable(lua_State* L, char8* tname);
 		[Import(lua.LIB_DLL), LinkName("luaL_testudata")]
-		public static extern void* testudata(lua_State* L, int32 ud, char8* tname);
+		public static extern void* testudata(lua_State* L, int ud, char8* tname);
 		[Import(lua.LIB_DLL), LinkName("luaL_checkudata")]
-		public static extern void* checkudata(lua_State* L, int32 ud, char8* tname);
+		public static extern void* checkudata(lua_State* L, int ud, char8* tname);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_where")]
-		public static extern void where_(lua_State* L, int32 lvl); /* Suffixed with _ to prevent naming collision */
+		public static extern void where_(lua_State* L, int lvl); /* Suffixed with _ to prevent naming collision */
 		[Import(lua.LIB_DLL), LinkName("luaL_error"), CVarArgs]
-		public static extern int32 error(lua_State* L, char8* fmt, params Object[] args);
+		public static extern int error(lua_State* L, char8* fmt, params Object[] args);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_checkoption")]
-		public static extern int32 checkoption(lua_State* L, int32 arg, char8* def, char8[]* lst);
+		public static extern int checkoption(lua_State* L, int arg, char8* def, char8[]* lst);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_fileresult")]
-		public static extern int32 fileresult(lua_State* L, int32 stat, char8* fname); 
+		public static extern int fileresult(lua_State* L, int stat, char8* fname); 
 		[Import(lua.LIB_DLL), LinkName("luaL_execresult")]
-		public static extern int32 execresult(lua_State* L, int32 stat);
+		public static extern int execresult(lua_State* L, int stat);
 
 		/* predefined references */
-		public const int32 NOREF  = -2;
-		public const int32 REFNIL = -1;
+		public const int NOREF  = -2;
+		public const int REFNIL = -1;
 
 		[Import(lua.LIB_DLL), LinkName("luaL_ref")]
-		public static extern int32 ref_(lua_State* L, int32 t); /* Suffixed with _ to prevent naming collision */
+		public static extern int ref_(lua_State* L, int t); /* Suffixed with _ to prevent naming collision */
 		[Import(lua.LIB_DLL), LinkName("luaL_unref")]
-		public static extern void unref(lua_State* L, int32 t, int32 ref_);
+		public static extern void unref(lua_State* L, int t, int ref_);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_loadfilex")]
-		public static extern int32 loadfilex(lua_State* L, char8* filename, char8* mode);
+		public static extern int loadfilex(lua_State* L, char8* filename, char8* mode);
 
 		[Inline]
-		public static int32 loadfile(lua_State* L, String f)
+		public static int loadfile(lua_State* L, String filename)
 		{
-			return loadfilex(L, f.CStr(), null);
+			return loadfilex(L, filename.CStr(), null);
 		}
 
 		[Import(lua.LIB_DLL), LinkName("luaL_loadbufferx")]
-		public static extern int32 loadbufferx(lua_State* L, char8* buff, size_t sz, char8* name, char8* mode);
+		public static extern int loadbufferx(lua_State* L, char8* buff, size_t sz, char8* name, char8* mode);
 		[Import(lua.LIB_DLL), LinkName("luaL_loadstring")]
-		public static extern int32 loadstring(lua_State* L, char8* s);
+		public static extern int loadstring(lua_State* L, char8* s);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_newstate")]
 		public static extern lua_State* newstate();
 
 		[Import(lua.LIB_DLL), LinkName("luaL_len")]
-		public static extern lua_Integer len(lua_State* L, int32 idx);
+		public static extern lua_Integer len(lua_State* L, int idx);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_gsub")]
 		public static extern char8* gsub(lua_State* L, char8* s, char8* p, char8* r);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_setfuncs")]
-		public static extern void setfuncs(lua_State* L, luaL_Reg* l, int32 nup);
+		public static extern void setfuncs(lua_State* L, luaL_Reg* l, int nup);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_getsubtable")]
-		public static extern int32 getsubtable(lua_State* L, int32 idx, char8* fname);
+		public static extern int getsubtable(lua_State* L, int idx, char8* fname);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_traceback")]
-		public static extern void traceback(lua_State* L, lua_State* L1, char8* msg, int32 level);
+		public static extern void traceback(lua_State* L, lua_State* L1, char8* msg, int level);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_requiref")]
 		public static extern void requiref(lua_State* L, char8* modname, lua_CFunction openf, bool glb);
@@ -177,7 +177,7 @@ namespace lua535_beef
 		[Inline]
 		public static void newlibtable(lua_State* L, luaL_Reg[] l)
 		{
-			lua.createtable(L, 0, (int32)(l.Count / sizeof(luaL_Reg) - 1));
+			lua.createtable(L, 0, (int)(l.Count / sizeof(luaL_Reg) - 1));
 		}
 
 		[Inline]
@@ -189,34 +189,34 @@ namespace lua535_beef
 		}
 
 		[Inline]
-		public static void argcheck (lua_State* L, bool cond, int32 n, String extramsg)
+		public static void argcheck(lua_State* L, bool cond, int idx, String extramsg)
 		{
 			if (!cond)
-				argerror(L, n, extramsg.CStr());
+				argerror(L, idx, extramsg.CStr());
 		}
 
 		[Inline]
-		public static void checkstring (lua_State* L, int32 n, String buffer)
+		public static void checkstring(lua_State* L, int idx, String buffer)
 		{
-			buffer.Append(checklstring(L, n, null));
+			buffer.Append(checklstring(L, idx, null));
 		}
 
 		[Inline]
-		public static void optstring (lua_State* L, int32 n, String d, String buffer)
+		public static void optstring(lua_State* L, int idx, String def, String buffer)
 		{
-			buffer.Append(optlstring(L, n, d.CStr(), null));
+			buffer.Append(optlstring(L, idx, def.CStr(), null));
 		}
 
 		[Inline]
-		public static void typename (lua_State* L, int32 n, String buffer)
+		public static void typename(lua_State* L, int idx, String buffer)
 		{
-			buffer.Append(lua.typename(L, lua.type(L, n)));
+			buffer.Append(lua.typename(L, lua.type(L, idx)));
 		}
 
 		[Inline]
-		public static int32 dofile(lua_State* L, String fn)
+		public static int dofile(lua_State* L, String filename)
 		{ 
-			let res = loadfile(L, fn);
+			let res = loadfile(L, filename);
 
 			if (res == lua.OK)
 				return lua.pcall(L, 0, lua.MULTRET, 0);
@@ -225,9 +225,9 @@ namespace lua535_beef
 		}
  
 		[Inline]
-		public static int32 dostring(lua_State* L, String s)
+		public static int dostring(lua_State* L, String str)
 		{
-			let res = loadstring(L, s.CStr());
+			let res = loadstring(L, str.CStr());
 
 			if (res == lua.OK)
 				return lua.pcall(L, 0, lua.MULTRET, 0);
@@ -236,15 +236,15 @@ namespace lua535_beef
 		}
 
 		[Inline]
-		public static int32 getmetatable(lua_State* L, String n)
+		public static int getmetatable(lua_State* L, String name)
  		{
-			 return lua.getfield(L, lua.REGISTRYINDEX, n.CStr());
+			 return lua.getfield(L, lua.REGISTRYINDEX, name.CStr());
 		}
 
 		[Inline]
-		public static int32 loadbuffer(lua_State* L, String s, size_t sz, String n)
+		public static int loadbuffer(lua_State* L, String buff, size_t sz, String name)
  		{
-			 return loadbufferx(L, s.CStr(), sz, n.CStr(), null);
+			 return loadbufferx(L, buff.CStr(), sz, name.CStr(), null);
 		}
 
 		/*
@@ -255,18 +255,18 @@ namespace lua535_beef
 
 		// #define luaL_addchar(B,c) ((void)((B)->n < (B)->size || luaL_prepbuffsize((B), 1)), ((B)->b[(B)->n++] = (c)))
 		[Inline]
-		public static void addchar(luaL_Buffer* B, char8 c)
+		public static void addchar(luaL_Buffer* B, char8 val)
 		{
 			if (B.n < B.size)
 				prepbuffsize(B, 1); 
 
-			B.b[B.n++] = c;
+			B.b[B.n++] = val;
 		}
 
 		[Inline]
-		public static void addsize(luaL_Buffer* B, size_t s)
+		public static void addsize(luaL_Buffer* B, size_t sz)
 		{
-			B.n += s;
+			B.n += sz;
 		}
 
 		[Import(lua.LIB_DLL), LinkName("luaL_buffinit")]
@@ -313,9 +313,9 @@ namespace lua535_beef
 		/* compatibility with old module system */
 		#if LUA_COMPAT_MODULE
 			[Import(lua.LIB_DLL), LinkName("luaL_pushmodule")]
-			public static extern void pushmodule(lua_State* L, char8* modname, int32 sizehint);
+			public static extern void pushmodule(lua_State* L, char8* modname, int sizehint);
 			[Import(lua.LIB_DLL), LinkName("luaL_openlib")]
-			public static extern void openlib(lua_State* L, char8* libname, luaL_Reg* l, int32 nup);
+			public static extern void openlib(lua_State* L, char8* libname, luaL_Reg* l, int nup);
 
 			[Inline]
 			public static void register(lua_State* L, char8* n, luaL_Reg* l)
@@ -334,9 +334,9 @@ namespace lua535_beef
 
 		/* print a string */
 		[Inline]
-		public static void writestring(String s, int32 l)
+		public static void writestring(String val)
 		{
-			 Console.Out.Write(s).IgnoreError();
+			 Console.Out.Write(val).IgnoreError();
 		}
 
 		/* print a newline and flush the output */
@@ -348,9 +348,9 @@ namespace lua535_beef
 
 		/* print an error message */
 		[Inline]
-		public static void writestringerror(String s, params Object[] p)
+		public static void writestringerror(String fmt, params Object[] args)
 		{
-			 Console.Error.WriteLine(s, params p).IgnoreError();
+			 Console.Error.WriteLine(fmt, params args).IgnoreError();
 		}
 
 		/* }================================================================== */
@@ -363,36 +363,36 @@ namespace lua535_beef
 
 		#if LUA_COMPAT_APIINTCASTS
 			[Inline]
-			public static lua_Unsigned checkunsigned(lua_State* L, int32 n)
+			public static lua_Unsigned checkunsigned(lua_State* L, int idx)
 			{
-				return (lua_Unsigned)checkinteger(L, n);
+				return (lua_Unsigned)checkinteger(L, idx);
 			}
 			[Inline]
-			public static lua_Unsigned optunsigned(lua_State* L, int32 n, lua_Unsigned d)
+			public static lua_Unsigned optunsigned(lua_State* L, int idx, lua_Unsigned def)
 			{
-				return (lua_Unsigned)optinteger(L, n, (lua_Integer)d);
-			}
-
-			[Inline]
-			public static int32 checkint(lua_State* L, int32 n)
-			{
-				return (int32)checkinteger(L, n);
-			}
-			[Inline]
-			public static int32 optint(lua_State* L, int32 n, int32 d)
-			{
-				return (int32)optinteger(L, n, d);
+				return (lua_Unsigned)optinteger(L, idx, (lua_Integer)def);
 			}
 
 			[Inline]
-			public static int64 checklong(lua_State* L, int32 n)
+			public static int checkint(lua_State* L, int idx)
 			{
-				return (int64)checkinteger(L, n);
+				return (int)checkinteger(L, idx);
 			}
 			[Inline]
-			public static int64 optlong(lua_State* L, int32 n, int64 d)
+			public static int optint(lua_State* L, int idx, int def)
 			{
-				return (int64)optinteger(L, n, d);
+				return (int)optinteger(L, idx, def);
+			}
+
+			[Inline]
+			public static int64 checklong(lua_State* L, int idx)
+			{
+				return (int64)checkinteger(L, idx);
+			}
+			[Inline]
+			public static int64 optlong(lua_State* L, int idx, int64 def)
+			{
+				return (int64)optinteger(L, idx, def);
 			}
 		#endif
 
@@ -404,37 +404,43 @@ namespace lua535_beef
 		** =============================================================
 		*/
 		[Inline]
-		public static void push_globalnil(lua_State* L, String name)
+		public static void PushGlobalNil(lua_State* L, String name)
 		{
 			lua.pushnil(L);
 			lua.setglobal(L, name.CStr());
 		}
 		[Inline]
-		public static void push_globalnumber(lua_State* L, String name, lua_Number val)
+		public static void PushGlobalNumber(lua_State* L, String name, lua_Number val)
 		{
 			lua.pushnumber(L, val);
 			lua.setglobal(L, name.CStr());
 		}
 		[Inline]
-		public static void push_globalinteger(lua_State* L, String name, lua_Integer val)
+		public static void PushGlobalInteger(lua_State* L, String name, lua_Integer val)
 		{
 			lua.pushinteger(L, val);
 			lua.setglobal(L, name.CStr());
 		}
 		[Inline]
-		public static void push_globalstring(lua_State* L, String name, String val)
+		public static void PushGlobalString(lua_State* L, String name, String val)
 		{ 
 			lua.pushstring(L, val.CStr());
 			lua.setglobal(L, name.CStr());
 		}
 		[Inline]
-		public static void push_globalboolean(lua_State* L, String name, bool val)
+		public static void PushGlobalBool(lua_State* L, String name, bool val)
 		{
 			lua.pushboolean(L, val);
 			lua.setglobal(L, name.CStr());
 		}
+		[Inline]
+		public static void PushModule(lua_State* L, String name, lua_CFunction fn, bool glb)
+		{
+			requiref(L, name.CStr(), fn, glb);
+			lua.pop(L, 1); // Pop is required because requiref leaves the lib table on the stack
+		}
 
-		public const int32 ERR_IDX     = -1;
-		public const int32 ERR_POP_IDX = 1;
+		public const int ERR_IDX     = -1;
+		public const int ERR_POP_IDX = 1;
 	}
 }

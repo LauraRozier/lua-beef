@@ -196,8 +196,12 @@ namespace lua535_beef
 	/* }================================================================== */
 	
 	public typealias ptrdiff_t    = void*;
-	public typealias intptr_t     = int32*;
+	public typealias intptr_t     = int*;
+	#if BF_64_BIT
+	public typealias size_t       = uint64;
+	#else
 	public typealias size_t       = uint32;
+	#endif
 	public typealias va_list      = void*;
 
 	public typealias lu_byte      = uint8;
@@ -205,22 +209,22 @@ namespace lua535_beef
 	public typealias lua_Integer  = int64;
 	public typealias lua_Unsigned = uint64;
 	public typealias lua_KContext = intptr_t;
-	public typealias Instruction  = uint32;
+	public typealias Instruction  = uint;
 
 	/*
 	** Functions to be called by the debugger in specific events
 	*/
-	public typealias lua_Hook = function void(lua_State* L, int32 status, lua_KContext ctx);
+	public typealias lua_Hook = function void(lua_State* L, int status, lua_KContext ctx);
 
 	/*
 	** Type for C functions registered with Lua
 	*/
-	public typealias lua_CFunction = function int32(lua_State* L);
+	public typealias lua_CFunction = function int(lua_State* L);
 
 	/*
 	** Type for continuation functions
 	*/ 
-	public typealias lua_KFunction = function int32(lua_State* L);
+	public typealias lua_KFunction = function int(lua_State* L);
 
 	/*
 	** Type for functions that read/write blocks when loading/dumping Lua chunks
@@ -246,7 +250,7 @@ namespace lua535_beef
 	{
 	  public GCObject* gc;    /* collectable objects */
 	  public void* p;         /* light userdata */
-	  public int32 b;         /* booleans */
+	  public int b;         /* booleans */
 	  public lua_CFunction f; /* light C functions */
 	  public lua_Integer i;   /* integer numbers */
 	  public lua_Number n;    /* float numbers */
@@ -256,7 +260,7 @@ namespace lua535_beef
 	public struct lua_TValue
 	{
 	  	public Value value_;
-		public int32 tt_;
+		public int tt_;
 	}
 
 	public typealias TValue = lua_TValue;
@@ -265,14 +269,14 @@ namespace lua535_beef
 	[CRepr]
 	public struct lua_Debug
 	{
-	  public int32 event;
+	  public int event;
 	  public char8* name;                 /* (n) */
 	  public char8* namewhat;             /* (n) 'global', 'local', 'field', 'method' */
 	  public char8* what;                 /* (S) 'Lua', 'C', 'main', 'tail' */
 	  public char8* source;               /* (S) */
-	  public int32 currentline;           /* (l) */
-	  public int32 linedefined;           /* (S) */
-	  public int32 lastlinedefined;       /* (S) */
+	  public int currentline;           /* (l) */
+	  public int linedefined;           /* (S) */
+	  public int lastlinedefined;       /* (S) */
 	  public uint8 nups;                  /* (u) number of upvalues */
 	  public uint8 nparams;               /* (u) number of parameters */
 	  public char8 isvararg;              /* (u) */
@@ -303,12 +307,12 @@ namespace lua535_beef
 		public void* base_ci;       /* CallInfo for first level (C calling Lua) */
 		public lua_Hook hook;
 		public ptrdiff_t errfunc;   /* current error handling function (stack index) */
-		public int32 stacksize;
-		public int32 basehookcount;
-		public int32 hookcount;
+		public int stacksize;
+		public int basehookcount;
+		public int hookcount;
 		public uint16 nny;          /* number of non-yieldable calls in stack */
 		public uint16 nCcalls;      /* number of nested C calls */
-		public int32 hookmask;
+		public int hookmask;
 		public lu_byte allowhook;
 	}
 
@@ -404,22 +408,22 @@ namespace lua535_beef
 			** change your code to avoid using them.
 			*/
 			[Inline]
-			public static size_t strlen(lua_State* L, int32 i) {
+			public static size_t strlen(lua_State* L, int i) {
 				return rawlen(L, i);
 			}
 
 			[Inline]
-			public static size_t objlen(lua_State* L, int32 i) {
+			public static size_t objlen(lua_State* L, int i) {
 				return rawlen(L, i);
 			}
 
 			[Inline]
-			public static int32 equal(lua_State* L, int32 idx1, int32 idx2) {
+			public static int equal(lua_State* L, int idx1, int idx2) {
 				return compare(L, idx1, idx2, LUA_OPEQ);
 			}
 
 			[Inline]
-			public static int32 lessthan(lua_State* L, int32 idx1, int32 idx2) {
+			public static int lessthan(lua_State* L, int idx1, int idx2) {
 				return compare(L, idx1, idx2, LUA_OPLT);
 			}
 		#endif
@@ -440,21 +444,21 @@ namespace lua535_beef
 		** its only purpose is to stop Lua from consuming unlimited stack
 		** space (and to reserve some numbers for pseudo-indices).
 		*/
-		public const int32 MAXSTACK = 1000000;
+		public const int MAXSTACK = 1000000;
 
 		/*
 		@@ LUA_EXTRASPACE defines the size of a raw memory area associated with
 		** a Lua state with very fast access.
 		** CHANGE it if you need a different size.
 		*/
-		public const int32 EXTRASPACE = sizeof(void*);
+		public const int EXTRASPACE = sizeof(void*);
 
 		/*
 		@@ LUA_IDSIZE gives the maximum size for the description of the source
 		@@ of a function in debug information.
 		** CHANGE it if you want a different size.
 		*/
-		public const int32 IDSIZE = 60;
+		public const int IDSIZE = 60;
 
 		/*
 		@@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
@@ -463,7 +467,7 @@ namespace lua535_beef
 		** smaller buffer would force a memory allocation for each call to
 		** 'string.format'.)
 		*/
-		public const int32 BUFFERSIZE = (int)(0x80 * sizeof(void*) * sizeof(lua_Integer));
+		public const int BUFFERSIZE = (int)(0x80 * sizeof(void*) * sizeof(lua_Integer));
 
 		/* =================================================================== */
 
@@ -475,7 +479,7 @@ namespace lua535_beef
 
 		public const String VERSION_MAJOR   = "5";
 		public const String VERSION_MINOR   = "3";
-		public const uint32 VERSION_NUM     = 503;
+		public const uint VERSION_NUM     = 503;
 		public const String VERSION_RELEASE = "5";
 
 		public const String VERSION         = "Lua " + VERSION_MAJOR + "." + VERSION_MINOR;
@@ -487,53 +491,53 @@ namespace lua535_beef
 		public const String SIGNATURE = "\x1bLua";
 
 		/* option for multiple returns in `lua_pcall' and `lua_call' */
-		public const int32 MULTRET    = -1;
+		public const int MULTRET    = -1;
 
 		/*
 		** Pseudo-indices
 		** (-LUAI_MAXSTACK is the minimum valid index; we keep some free empty
 		** space after that to help overflow detection)
 		*/
-		public const int32 REGISTRYINDEX      = (-MAXSTACK) - 1000;
+		public const int REGISTRYINDEX = (-MAXSTACK) - 1000;
 		[Inline]
-		public static int32 upvalueindex(int32 i)
+		public static int upvalueindex(int idx)
 		{
-			return REGISTRYINDEX - i;
+			return REGISTRYINDEX - idx;
 		}
 
 		/* thread status */
-		public const int32 OK        = 0;
-		public const int32 YIELD     = 1;
-		public const int32 ERRRUN    = 2;
-		public const int32 ERRSYNTAX = 3;
-		public const int32 ERRMEM    = 4;
-		public const int32 ERRGCMM   = 5;
-		public const int32 ERRERR    = 6;
+		public const int OK        = 0;
+		public const int YIELD     = 1;
+		public const int ERRRUN    = 2;
+		public const int ERRSYNTAX = 3;
+		public const int ERRMEM    = 4;
+		public const int ERRGCMM   = 5;
+		public const int ERRERR    = 6;
 
 		/*
 		** basic types
 		*/
-		public const int32 TNONE          = -1;
+		public const int TNONE          = -1;
 
-		public const int32 TNIL           = 0;
-		public const int32 TBOOLEAN       = 1;
-		public const int32 TLIGHTUSERDATA = 2;
-		public const int32 TNUMBER        = 3;
-		public const int32 TSTRING        = 4;
-		public const int32 TTABLE         = 5;
-		public const int32 TFUNCTION      = 6;
-		public const int32 TUSERDATA      = 7;
-		public const int32 TTHREAD        = 8;
+		public const int TNIL           = 0;
+		public const int TBOOLEAN       = 1;
+		public const int TLIGHTUSERDATA = 2;
+		public const int TNUMBER        = 3;
+		public const int TSTRING        = 4;
+		public const int TTABLE         = 5;
+		public const int TFUNCTION      = 6;
+		public const int TUSERDATA      = 7;
+		public const int TTHREAD        = 8;
 
-		public const int32 NUMTAGS        = 9;
+		public const int NUMTAGS        = 9;
 
 		/* minimum Lua stack available to a C function */
-		public const int32 MINSTACK = 20;
+		public const int MINSTACK = 20;
 
 		/* predefined values in the registry */
-		public const int32 RIDX_MAINTHREAD = 1;
-		public const int32 RIDX_GLOBALS    = 2;
-		public const int32 RIDX_LAST       = RIDX_GLOBALS;
+		public const int RIDX_MAINTHREAD = 1;
+		public const int RIDX_GLOBALS    = 2;
+		public const int RIDX_LAST       = RIDX_GLOBALS;
 
 		#if BF_PLATFORM_WINDOWS
 			public const String LIB_DLL = "lua53.dll";
@@ -568,89 +572,89 @@ namespace lua535_beef
 		** basic stack manipulation
 		*/
 		[Import(LIB_DLL), LinkName("lua_absindex")]
-		public extern static int32 absindex(lua_State* L, int32 idx);
+		public extern static int absindex(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_gettop")]
-		public extern static int32 gettop(lua_State* L);
+		public extern static int gettop(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_settop")]
-		public extern static void settop(lua_State* L, int32 idx);
+		public extern static void settop(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_pushvalue")]
-		public extern static void pushvalue(lua_State* L, int32 idx);
+		public extern static void pushvalue(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_rotate")]
-		public extern static void rotate(lua_State* L, int32 idx, int32 n);
+		public extern static void rotate(lua_State* L, int idx, int n);
 		[Import(LIB_DLL), LinkName("lua_copy")]
-		public extern static void copy(lua_State* L, int32 fromidx, int32 toidx);
+		public extern static void copy(lua_State* L, int fromidx, int toidx);
 		[Import(LIB_DLL), LinkName("lua_checkstack")]
-		public extern static int32 checkstack(lua_State* L, int32 n);
+		public extern static int checkstack(lua_State* L, int n);
 
 		[Import(LIB_DLL), LinkName("lua_xmove")]
-		public extern static void xmove(lua_State* from, lua_State* to, int32 n);
+		public extern static void xmove(lua_State* from, lua_State* to, int n);
 
 		/*
 		** access functions (stack -> C)
 		*/
 		[Import(LIB_DLL), LinkName("lua_isnumber")]
-		public extern static bool isnumber(lua_State* L, int32 idx);
+		public extern static bool isnumber(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_isstring")]
-		public extern static bool isstring(lua_State* L, int32 idx);
+		public extern static bool isstring(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_iscfunction")]
-		public extern static bool iscfunction(lua_State* L, int32 idx);
+		public extern static bool iscfunction(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_isinteger")]
-		public extern static bool isinteger(lua_State* L, int32 idx);
+		public extern static bool isinteger(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_isuserdata")]
-		public extern static bool isuserdata(lua_State* L, int32 idx);
+		public extern static bool isuserdata(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_type")]
-		public extern static int32 type(lua_State* L, int32 idx);
+		public extern static int type(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_typename")]
-		public extern static char8* typename(lua_State* L, int32 tp);
+		public extern static char8* typename(lua_State* L, int tp);
 
 		[Import(LIB_DLL), LinkName("lua_tonumberx")]
-		public extern static lua_Number tonumberx(lua_State* L, int32 idx, bool* isnum);
+		public extern static lua_Number tonumberx(lua_State* L, int idx, bool* isnum);
 		[Import(LIB_DLL), LinkName("lua_tointegerx")]
-		public extern static lua_Integer tointegerx(lua_State* L, int32 idx, bool* isnum);
+		public extern static lua_Integer tointegerx(lua_State* L, int idx, bool* isnum);
 		[Import(LIB_DLL), LinkName("lua_toboolean")]
-		public extern static bool toboolean(lua_State* L, int32 idx);
+		public extern static bool toboolean(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_tolstring")]
-		public extern static char8* tolstring(lua_State* L, int32 idx, size_t* len);
+		public extern static char8* tolstring(lua_State* L, int idx, size_t* len);
 		[Import(LIB_DLL), LinkName("lua_rawlen")]
-		public extern static size_t rawlen(lua_State* L, int32 idx);
+		public extern static size_t rawlen(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_tocfunction")]
-		public extern static lua_CFunction tocfunction(lua_State* L, int32 idx);
+		public extern static lua_CFunction tocfunction(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_touserdata")]
-		public extern static void* touserdata(lua_State* L, int32 idx);
+		public extern static void* touserdata(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_tothread")]
-		public extern static lua_State* tothread(lua_State* L, int32 idx);
+		public extern static lua_State* tothread(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_topointer")]
-		public extern static void* topointer(lua_State* L, int32 idx);
+		public extern static void* topointer(lua_State* L, int idx);
 
 		/*
 		** Comparison and arithmetic functions
 		*/
-		public const int32 OPADD  = 0; /* ORDER TM, ORDER OP */
-		public const int32 OPSUB  = 1;
-		public const int32 OPMUL  = 2;
-		public const int32 OPMOD  = 3;
-		public const int32 OPPOW  = 4;
-		public const int32 OPDIV  = 5;
-		public const int32 OPIDIV = 6;
-		public const int32 OPBAND = 7;
-		public const int32 OPBOR  = 8;
-		public const int32 OPBXOR = 9;
-		public const int32 OPSHL  = 10;
-		public const int32 OPSHR  = 11;
-		public const int32 OPUNM  = 12;
-		public const int32 OPBNOT = 13;
+		public const int OPADD  = 0; /* ORDER TM, ORDER OP */
+		public const int OPSUB  = 1;
+		public const int OPMUL  = 2;
+		public const int OPMOD  = 3;
+		public const int OPPOW  = 4;
+		public const int OPDIV  = 5;
+		public const int OPIDIV = 6;
+		public const int OPBAND = 7;
+		public const int OPBOR  = 8;
+		public const int OPBXOR = 9;
+		public const int OPSHL  = 10;
+		public const int OPSHR  = 11;
+		public const int OPUNM  = 12;
+		public const int OPBNOT = 13;
 
 		[Import(LIB_DLL), LinkName("lua_arith")]
-		public extern static void arith(lua_State* L, int32 op);
+		public extern static void arith(lua_State* L, int op);
 
-		public const int32 OPEQ = 0;
-		public const int32 OPLT = 1;
-		public const int32 OPLE = 2;
+		public const int OPEQ = 0;
+		public const int OPLT = 1;
+		public const int OPLE = 2;
 
 		[Import(LIB_DLL), LinkName("lua_rawequal")]
-		public extern static int32 rawequal(lua_State* L, int32 idx1, int32 idx2);
+		public extern static int rawequal(lua_State* L, int idx1, int idx2);
 		[Import(LIB_DLL), LinkName("lua_compare")]
-		public extern static int32 compare(lua_State* L, int32 idx1, int32 idx2, int32 op);
+		public extern static int compare(lua_State* L, int idx1, int idx2, int op);
 
 		/*
 		** push functions (C -> stack)
@@ -658,52 +662,52 @@ namespace lua535_beef
 		[Import(LIB_DLL), LinkName("lua_pushnil")]
 		public extern static void pushnil(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_pushnumber")]
-		public extern static void pushnumber(lua_State* L, lua_Number n);
+		public extern static void pushnumber(lua_State* L, lua_Number val);
 		[Import(LIB_DLL), LinkName("lua_pushinteger")]
-		public extern static void pushinteger(lua_State* L, lua_Integer n);
+		public extern static void pushinteger(lua_State* L, lua_Integer val);
 		[Import(LIB_DLL), LinkName("lua_pushlstring")]
-		public extern static char8* pushlstring(lua_State* L, char8* s, size_t len);
+		public extern static char8* pushlstring(lua_State* L, char8* val, size_t len);
 		[Import(LIB_DLL), LinkName("lua_pushstring")]
-		public extern static char8* pushstring(lua_State* L, char8* s);
+		public extern static char8* pushstring(lua_State* L, char8* val);
 		[Import(LIB_DLL), LinkName("lua_pushvfstring")]
 		public extern static char8* pushvfstring(lua_State* L, char8* fmt, va_list argp);
 		[Import(LIB_DLL), LinkName("lua_pushfstring"), CVarArgs]
 		public extern static char8* pushfstring(lua_State* L, char8* fmt, params Object[] args);
 		[Import(LIB_DLL), LinkName("lua_pushcclosure")]
-		public extern static void pushcclosure(lua_State* L, lua_CFunction fn, int32 n);
+		public extern static void pushcclosure(lua_State* L, lua_CFunction val, int n);
 		[Import(LIB_DLL), LinkName("lua_pushboolean")]
-		public extern static void pushboolean(lua_State* L, bool b);
+		public extern static void pushboolean(lua_State* L, bool val);
 		[Import(LIB_DLL), LinkName("lua_pushlightuserdata")]
 		public extern static void pushlightuserdata(lua_State* L, void* p);
 		[Import(LIB_DLL), LinkName("lua_pushthread")]
-		public extern static int32 pushthread(lua_State* L);
+		public extern static int pushthread(lua_State* L);
 
 		/*
 		** get functions (Lua -> stack)
 		*/
 		[Import(LIB_DLL), LinkName("lua_getglobal")]
-		public extern static int32 getglobal(lua_State* L, char8* name);
+		public extern static int getglobal(lua_State* L, char8* name);
 		[Import(LIB_DLL), LinkName("lua_gettable")]
-		public extern static int32 gettable(lua_State* L, int32 idx);
+		public extern static int gettable(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_getfield")]
-		public extern static int32 getfield(lua_State* L, int32 idx, char8* k);
+		public extern static int getfield(lua_State* L, int idx, char8* k);
 		[Import(LIB_DLL), LinkName("lua_geti")]
-		public extern static int32 geti(lua_State* L, int32 idx, lua_Integer n);
+		public extern static int geti(lua_State* L, int idx, lua_Integer n);
 		[Import(LIB_DLL), LinkName("lua_rawget")]
-		public extern static int32 rawget(lua_State* L, int32 idx);
+		public extern static int rawget(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_rawgeti")]
-		public extern static int32 rawgeti(lua_State* L, int32 idx, lua_Integer n);
+		public extern static int rawgeti(lua_State* L, int idx, lua_Integer n);
 		[Import(LIB_DLL), LinkName("lua_rawgetp")]
-		public extern static int32 rawgetp(lua_State* L, int32 idx, void* p);
+		public extern static int rawgetp(lua_State* L, int idx, void* p);
 
 		[Import(LIB_DLL), LinkName("lua_createtable")]
-		public extern static void createtable(lua_State* L, int32 narr, int32 nrec);
+		public extern static void createtable(lua_State* L, int narr, int nrec);
 		[Import(LIB_DLL), LinkName("lua_newuserdata")]
 		public extern static void* newuserdata(lua_State* L, size_t sz);
 		[Import(LIB_DLL), LinkName("lua_getmetatable")]
-		public extern static int32 getmetatable(lua_State* L, int32 objindex);
+		public extern static int getmetatable(lua_State* L, int objindex);
 		[Import(LIB_DLL), LinkName("lua_getuservalue")]
-		public extern static int32 getuservalue(lua_State* L, int32 idx);
+		public extern static int getuservalue(lua_State* L, int idx);
 
 		/*
 		** set functions (stack -> Lua)
@@ -711,94 +715,94 @@ namespace lua535_beef
 		[Import(LIB_DLL), LinkName("lua_setglobal")]
 		public extern static void setglobal(lua_State* L, char8* name);
 		[Import(LIB_DLL), LinkName("lua_settable")]
-		public extern static void settable(lua_State* L, int32 idx);
+		public extern static void settable(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_setfield")]
-		public extern static void setfield(lua_State* L, int32 idx, char8* k);
+		public extern static void setfield(lua_State* L, int idx, char8* k);
 		[Import(LIB_DLL), LinkName("lua_seti")]
-		public extern static void seti(lua_State* L, int32 idx, lua_Integer n);
+		public extern static void seti(lua_State* L, int idx, lua_Integer n);
 		[Import(LIB_DLL), LinkName("lua_rawset")]
-		public extern static void rawset(lua_State* L, int32 idx);
+		public extern static void rawset(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_rawseti")]
-		public extern static void rawseti(lua_State* L, int32 idx, lua_Integer n);
+		public extern static void rawseti(lua_State* L, int idx, lua_Integer n);
 		[Import(LIB_DLL), LinkName("lua_rawsetp")]
-		public extern static void rawsetp(lua_State* L, int32 idx, void* p);
+		public extern static void rawsetp(lua_State* L, int idx, void* p);
 		[Import(LIB_DLL), LinkName("lua_setmetatable")]
-		public extern static int32 setmetatable(lua_State* L, int32 objindex);
+		public extern static int setmetatable(lua_State* L, int objindex);
 		[Import(LIB_DLL), LinkName("lua_setuservalue")]
-		public extern static void setuservalue(lua_State* L, int32 idx);
+		public extern static void setuservalue(lua_State* L, int idx);
 
 		/*
 		** 'load' and 'call' functions (load and run Lua code)
 		*/
 		[Import(LIB_DLL), LinkName("lua_callk")]
-		public extern static void callk(lua_State* L, int32 nargs, int32 nresults, lua_KContext ctx, lua_KFunction k);
+		public extern static void callk(lua_State* L, int nargs, int nresults, lua_KContext ctx, lua_KFunction k);
 		[Inline]
-		public static void call(lua_State* L, int32 n, int32 r)
+		public static void call(lua_State* L, int nargs, int nresults)
 		{
-			callk(L, n, r, null, null);
+			callk(L, nargs, nresults, null, null);
 		}
 
 		[Import(LIB_DLL), LinkName("lua_pcallk")]
-		public extern static int32 pcallk(lua_State* L, int32 nargs, int32 nresults, int32 errfunc, lua_KContext ctx, lua_KFunction k);
+		public extern static int pcallk(lua_State* L, int nargs, int nresults, int errfunc, lua_KContext ctx, lua_KFunction k);
 		[Inline]
-		public static int32 pcall(lua_State* L, int32 n, int32 r, int32 f)
+		public static int pcall(lua_State* L, int nargs, int nresults, int errfunc)
 		{
-			return pcallk(L, n, r, f, null, null);
+			return pcallk(L, nargs, nresults, errfunc, null, null);
 		}
 
 		[Import(LIB_DLL), LinkName("lua_load")]
-		public extern static int32 load(lua_State* L, lua_Reader reader, void* dt, char8* chunkname, char8* mode);
+		public extern static int load(lua_State* L, lua_Reader reader, void* dt, char8* chunkname, char8* mode);
 
 		[Import(LIB_DLL), LinkName("lua_dump")]
-		public extern static int32 dump(lua_State* L, lua_Writer writer, void* data, int32 strip);
+		public extern static int dump(lua_State* L, lua_Writer writer, void* data, int strip);
 
 		/*
 		** coroutine functions
 		*/
 		[Import(LIB_DLL), LinkName("lua_yieldk")]
-		public extern static int32 yieldk(lua_State* L, int32 nresults, lua_KContext ctx, lua_KFunction k);
+		public extern static int yieldk(lua_State* L, int nresults, lua_KContext ctx, lua_KFunction k);
 		[Import(LIB_DLL), LinkName("lua_resume")]
-		public extern static int32 resume(lua_State* L, lua_State* from, int32 narg);
+		public extern static int resume(lua_State* L, lua_State* from, int narg);
 		[Import(LIB_DLL), LinkName("lua_status")]
-		public extern static int32 status(lua_State* L);
+		public extern static int status(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_isyieldable")]
-		public extern static int32 isyieldable(lua_State* L);
+		public extern static int isyieldable(lua_State* L);
 
 		[Inline]
-		public static int32 yield_(lua_State* L, int32 n) /* Suffixed with _ to prevent naming collision */
+		public static int yield_(lua_State* L, int nresults) /* Suffixed with _ to prevent naming collision */
 		{
-			return yieldk(L, n, null, null);
+			return yieldk(L, nresults, null, null);
 		}
 
 		/*
 		** garbage-collection function and options
 		*/
-		public const int32 GCSTOP       = 0;
-		public const int32 GCRESTART    = 1;
-		public const int32 GCCOLLECT    = 2;
-		public const int32 GCCOUNT      = 3;
-		public const int32 GCCOUNTB     = 4;
-		public const int32 GCSTEP       = 5;
-		public const int32 GCSETPAUSE   = 6;
-		public const int32 GCSETSTEPMUL = 7;
-		public const int32 GCISRUNNING  = 9;
+		public const int GCSTOP       = 0;
+		public const int GCRESTART    = 1;
+		public const int GCCOLLECT    = 2;
+		public const int GCCOUNT      = 3;
+		public const int GCCOUNTB     = 4;
+		public const int GCSTEP       = 5;
+		public const int GCSETPAUSE   = 6;
+		public const int GCSETSTEPMUL = 7;
+		public const int GCISRUNNING  = 9;
 
 		[Import(LIB_DLL), LinkName("lua_gc")]
-		public extern static int32 gc(lua_State* L, int32 what, int32 data);
+		public extern static int gc(lua_State* L, int what, int data);
 
 		/*
 		** miscellaneous functions
 		*/
 		[Import(LIB_DLL), LinkName("lua_error")]
-		public extern static int32 error(lua_State* L);
+		public extern static int error(lua_State* L);
 
 		[Import(LIB_DLL), LinkName("lua_next")]
-		public extern static int32 next(lua_State* L, int32 idx);
+		public extern static int next(lua_State* L, int idx);
 
 		[Import(LIB_DLL), LinkName("lua_concat")]
-		public extern static void concat(lua_State* L, int32 n);
+		public extern static void concat(lua_State* L, int n);
 		[Import(LIB_DLL), LinkName("lua_len")]
-		public extern static void len(lua_State* L, int32 idx);
+		public extern static void len(lua_State* L, int idx);
 
 		[Import(LIB_DLL), LinkName("lua_stringtonumber")]
 		public extern static size_t stringtonumber(lua_State* L, char8* s);
@@ -820,20 +824,20 @@ namespace lua535_beef
 		}
 
 		[Inline]
-		public static lua_Number tonumber(lua_State* L, int32 i)
+		public static lua_Number tonumber(lua_State* L, int idx)
 		{
-			return tonumberx(L, i, null);
+			return tonumberx(L, idx, null);
 		}
 		[Inline]
-		public static lua_Integer tointeger(lua_State* L, int32 i)
+		public static lua_Integer tointeger(lua_State* L, int idx)
 		{
-			return tointegerx(L, i, null);
+			return tointegerx(L, idx, null);
 		}
 
 		[Inline]
-		public static void pop(lua_State* L, int32 n)
+		public static void pop(lua_State* L, int idx)
 		{
-			settop(L, -(n - 1));
+			settop(L, -(idx - 1));
 		}
 
 		[Inline]
@@ -843,63 +847,63 @@ namespace lua535_beef
 		}
 
 		[Inline]
-		public static void register(lua_State* L, String n, lua_CFunction f)
+		public static void register(lua_State* L, String name, lua_CFunction fn)
 		{
-			pushcfunction(L, f);
-			setglobal(L, n.CStr());
+			pushcfunction(L, fn);
+			setglobal(L, name.CStr());
 		}
 
 		[Inline]
-		public static void pushcfunction(lua_State* L, lua_CFunction f)
+		public static void pushcfunction(lua_State* L, lua_CFunction fn)
 		{
-			pushcclosure(L, f, 0);
+			pushcclosure(L, fn, 0);
 		}
 
 		[Inline]
-		public static bool isfunction(lua_State* L, int32 n)
+		public static bool isfunction(lua_State* L, int idx)
 		{
-			return type(L, n) == TFUNCTION;
+			return type(L, idx) == TFUNCTION;
 		}
 		[Inline]
-		public static bool istable(lua_State* L, int32 n)
+		public static bool istable(lua_State* L, int idx)
 		{
-			return type(L, n) == TTABLE;
+			return type(L, idx) == TTABLE;
 		}
 		[Inline]
-		public static bool islightuserdata(lua_State* L, int32 n)
+		public static bool islightuserdata(lua_State* L, int idx)
 		{
-			return type(L, n) == TLIGHTUSERDATA;
+			return type(L, idx) == TLIGHTUSERDATA;
 		}
 		[Inline]
-		public static bool isnil(lua_State* L, int32 n)
+		public static bool isnil(lua_State* L, int idx)
 		{
-			return type(L, n) == TNIL;
+			return type(L, idx) == TNIL;
 		}
 		[Inline]
-		public static bool isboolean(lua_State* L, int32 n)
+		public static bool isboolean(lua_State* L, int idx)
 		{
-			return type(L, n) == TBOOLEAN;
+			return type(L, idx) == TBOOLEAN;
 		}
 		[Inline]
-		public static bool isthread(lua_State* L, int32 n)
+		public static bool isthread(lua_State* L, int idx)
 		{
-			return type(L, n) == TTHREAD;
+			return type(L, idx) == TTHREAD;
 		}
 		[Inline]
-		public static bool isnone(lua_State* L, int32 n)
+		public static bool isnone(lua_State* L, int idx)
 		{
-			return type(L, n) == TNONE;
+			return type(L, idx) == TNONE;
 		}
 		[Inline]
-		public static bool isnoneornil(lua_State* L, int32 n)
+		public static bool isnoneornil(lua_State* L, int idx)
 		{
-			return type(L, n) <= 0;
+			return type(L, idx) <= 0;
 		}
 
 		[Inline]
-		public static void pushliteral(lua_State* L, String s)
+		public static void pushliteral(lua_State* L, String str)
 		{
-			pushstring(L, s.CStr());
+			pushstring(L, str.CStr());
 		}
 
 		[Inline]
@@ -909,26 +913,26 @@ namespace lua535_beef
 		}
 
 		[Inline]
-		public static void tostring(lua_State* L, int32 i, String buffer)
+		public static void tostring(lua_State* L, int idx, String buffer)
 		{
-			buffer.Append(tolstring(L, i, null));
+			buffer.Append(tolstring(L, idx, null));
 		}
 
 		[Inline]
-		public static void insert(lua_State* L, int32 idx)
+		public static void insert(lua_State* L, int idx)
 		{
 			rotate(L, idx, 1);
 		}
 
 		[Inline]
-		public static void remove(lua_State* L, int32 idx)
+		public static void remove(lua_State* L, int idx)
 		{
 			rotate(L, idx, -1);
 			pop(L, 1);
 		}
 
 		[Inline]
-		public static void replace(lua_State* L, int32 idx)
+		public static void replace(lua_State* L, int idx)
 		{
 			copy(L, -1, idx);
 			pop(L, 1);
@@ -943,19 +947,19 @@ namespace lua535_beef
 		*/
 		#if LUA_COMPAT_APIINTCASTS
 			[Inline]
-			public static void pushunsigned(lua_State* L, lua_Integer n)
+			public static void pushunsigned(lua_State* L, lua_Integer val)
 			{
-				pushinteger(L, (lua_Integer)n);
+				pushinteger(L, (lua_Integer)val);
 			}
 			[Inline]
-			public static lua_Unsigned tounsignedx(lua_State* L, int32 i, bool* isnum)
+			public static lua_Unsigned tounsignedx(lua_State* L, int idx, bool* isnum)
 			{
-				return (lua_Unsigned)tointegerx(L, i, isnum);
+				return (lua_Unsigned)tointegerx(L, idx, isnum);
 			}
 			[Inline]
-			public static lua_Unsigned tounsigned(lua_State* L, int32 i)
+			public static lua_Unsigned tounsigned(lua_State* L, int idx)
 			{
-				return tounsignedx(L, i, null);
+				return tounsignedx(L, idx, null);
 			}
 		#endif
 		/* }============================================================== */
@@ -969,46 +973,46 @@ namespace lua535_beef
 		/*
 		** Event codes
 		*/
-		public const int32 HOOKCALL     = 0;
-		public const int32 HOOKRET      = 1;
-		public const int32 HOOKLINE     = 2;
-		public const int32 HOOKCOUNT    = 3;
-		public const int32 HOOKTAILCALL = 4;
+		public const int HOOKCALL     = 0;
+		public const int HOOKRET      = 1;
+		public const int HOOKLINE     = 2;
+		public const int HOOKCOUNT    = 3;
+		public const int HOOKTAILCALL = 4;
 
 		/*
 		** Event masks
 		*/
-		public const int32 MASKCALL  = 1 << HOOKCALL;
-		public const int32 MASKRET   = 1 << HOOKRET;
-		public const int32 MASKLINE  = 1 << HOOKLINE;
-		public const int32 MASKCOUNT = 1 << HOOKCOUNT;
+		public const int MASKCALL  = 1 << HOOKCALL;
+		public const int MASKRET   = 1 << HOOKRET;
+		public const int MASKLINE  = 1 << HOOKLINE;
+		public const int MASKCOUNT = 1 << HOOKCOUNT;
 
 		[Import(LIB_DLL), LinkName("lua_getstack")]
-		public extern static int32 getstack(lua_State* L, int32 level, lua_Debug* ar);
+		public extern static int getstack(lua_State* L, int level, lua_Debug* ar);
 		[Import(LIB_DLL), LinkName("lua_getinfo")]
-		public extern static int32 getinfo(lua_State* L, char8* what, lua_Debug* ar);
+		public extern static int getinfo(lua_State* L, char8* what, lua_Debug* ar);
 		[Import(LIB_DLL), LinkName("lua_getlocal")]
-		public extern static char8* getlocal(lua_State* L, lua_Debug* ar, int32 n);
+		public extern static char8* getlocal(lua_State* L, lua_Debug* ar, int n);
 		[Import(LIB_DLL), LinkName("lua_setlocal")]
-		public extern static char8* setlocal(lua_State* L, lua_Debug* ar, int32 n);
+		public extern static char8* setlocal(lua_State* L, lua_Debug* ar, int n);
 		[Import(LIB_DLL), LinkName("lua_getupvalue")]
-		public extern static char8* getupvalue(lua_State* L, int32 funcindex, int32 n);
+		public extern static char8* getupvalue(lua_State* L, int funcindex, int n);
 		[Import(LIB_DLL), LinkName("lua_setupvalue")]
-		public extern static char8* setupvalue(lua_State* L, int32 funcindex, int32 n);
+		public extern static char8* setupvalue(lua_State* L, int funcindex, int n);
 
 		[Import(LIB_DLL), LinkName("lua_upvalueid")]
-		public extern static void* upvalueid(lua_State* L, int32 fidx, int32 n);
+		public extern static void* upvalueid(lua_State* L, int fidx, int n);
 		[Import(LIB_DLL), LinkName("lua_upvaluejoin")]
-		public extern static void upvaluejoin(lua_State* L, int32 fidx1, int32 n1, int32 fidx2, int32 n2);
+		public extern static void upvaluejoin(lua_State* L, int fidx1, int n1, int fidx2, int n2);
 
 		[Import(LIB_DLL), LinkName("lua_sethook")]
-		public extern static void sethook(lua_State* L, lua_Hook func, int32 mask, int32 count);
+		public extern static void sethook(lua_State* L, lua_Hook func, int mask, int count);
 		[Import(LIB_DLL), LinkName("lua_gethook")]
 		public extern static lua_Hook gethook(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_gethookmask")]
-		public extern static int32 gethookmask(lua_State* L);
+		public extern static int gethookmask(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_gethookcount")]
-		public extern static int32 gethookcount(lua_State* L);
+		public extern static int gethookcount(lua_State* L);
 
 		/* }====================================================================== */
 	}
