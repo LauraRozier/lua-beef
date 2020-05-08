@@ -1,0 +1,6 @@
+{
+  "Name": "lua535-beef",
+  "Description": "BeefLang port of Lua 5.3.5",
+  "Author": "ThibmoRozier",
+  "Version": "1.0.0"
+}
