@@ -7,7 +7,7 @@ using System;
 
 namespace lua535_beef
 {
-	public static class lualib
+	public abstract class lualib
 	{
 		/* version suffix for environment variable names */
 		public const String VERSUFFIX = "_" + lua.VERSION_MAJOR + "_" + lua.VERSION_MINOR;

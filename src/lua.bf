@@ -214,28 +214,28 @@ namespace lua535_beef
 	/*
 	** Functions to be called by the debugger in specific events
 	*/
-	public typealias lua_Hook = function void(lua_State* L, int status, lua_KContext ctx);
+	function void lua_Hook(lua_State* L, int status, lua_KContext ctx);
 
 	/*
 	** Type for C functions registered with Lua
 	*/
-	public typealias lua_CFunction = function int(lua_State* L);
+	function int lua_CFunction(lua_State* L);
 
 	/*
 	** Type for continuation functions
 	*/ 
-	public typealias lua_KFunction = function int(lua_State* L);
+	function int lua_KFunction(lua_State* L);
 
 	/*
 	** Type for functions that read/write blocks when loading/dumping Lua chunks
 	*/
-	public typealias lua_Reader = function char8*(lua_State* L, void* ud, size_t* sz);
-	public typealias lua_Writer = function int(lua_State* L, void* p, size_t sz, void* ud);
+	function char8* lua_Reader(lua_State* L, void* ud, size_t* sz);
+	function int lua_Writer(lua_State* L, void* p, size_t sz, void* ud);
 
 	/*
 	** Type for memory-allocation functions
 	*/
-	public typealias lua_Alloc = function void*(void* ud, void* ptr, size_t osize, size_t nsize);
+	function void* lua_Alloc(void* ud, void* ptr, size_t osize, size_t nsize);
 
 	[CRepr]
 	public struct GCObject
@@ -323,7 +323,7 @@ namespace lua535_beef
 	** without modifying the main part of the file.
 	*/
 
-	public static class lua
+	public abstract class lua
 	{
 		/*
 		** {==================================================================
