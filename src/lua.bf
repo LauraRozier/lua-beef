@@ -240,27 +240,50 @@ namespace lua535_beef
 	[CRepr]
 	public struct GCObject
 	{
-	  public GCObject* next;
-	  public lu_byte tt;
-	  public lu_byte marked;
+		public GCObject* next;
+		public lu_byte tt;
+		public lu_byte marked;
+		
+		public this(GCObject* next, lu_byte tt, lu_byte marked)
+		{
+		    this.next = next;
+			this.tt = tt;
+		    this.marked = marked;
+		}
 	}
 
 	[CRepr, Union]
 	public struct Value
 	{
-	  public GCObject* gc;    /* collectable objects */
-	  public void* p;         /* light userdata */
-	  public int b;         /* booleans */
-	  public lua_CFunction f; /* light C functions */
-	  public lua_Integer i;   /* integer numbers */
-	  public lua_Number n;    /* float numbers */
+		public GCObject* gc;    /* collectable objects */
+		public void* p;         /* light userdata */
+		public int b;           /* booleans */
+		public lua_CFunction f; /* light C functions */
+		public lua_Integer i;   /* integer numbers */
+		public lua_Number n;    /* float numbers */
+		
+		public this(GCObject* gc, void* p, int b, lua_CFunction f, lua_Integer i, lua_Number n)
+		{
+		    this.gc = gc;
+		    this.p = p;
+		    this.b = b;
+		    this.f = f;
+		    this.i = i;
+		    this.n = n;
+		}
 	}
 
 	[CRepr]
 	public struct lua_TValue
 	{
-	  	public Value value_;
+		public Value value_;
 		public int tt_;
+		
+		public this(Value value_, int tt_)
+		{
+			this.value_ = value_;
+			this.tt_ = tt_;
+		}
 	}
 
 	public typealias TValue = lua_TValue;
@@ -269,21 +292,40 @@ namespace lua535_beef
 	[CRepr]
 	public struct lua_Debug
 	{
-	  public int event;
-	  public char8* name;                 /* (n) */
-	  public char8* namewhat;             /* (n) 'global', 'local', 'field', 'method' */
-	  public char8* what;                 /* (S) 'Lua', 'C', 'main', 'tail' */
-	  public char8* source;               /* (S) */
-	  public int currentline;           /* (l) */
-	  public int linedefined;           /* (S) */
-	  public int lastlinedefined;       /* (S) */
-	  public uint8 nups;                  /* (u) number of upvalues */
-	  public uint8 nparams;               /* (u) number of parameters */
-	  public char8 isvararg;              /* (u) */
-	  public char8 istailcall;            /* (t) */
-	  public char8[lua.IDSIZE] short_src; /* (S) */
-	  /* private part */
-	  public void* i_ci;                  /* active function */
+		public int event;
+		public char8* name;                 /* (n) */
+		public char8* namewhat;             /* (n) 'global', 'local', 'field', 'method' */
+		public char8* what;                 /* (S) 'Lua', 'C', 'main', 'tail' */
+		public char8* source;               /* (S) */
+		public int currentline;             /* (l) */
+		public int linedefined;             /* (S) */
+		public int lastlinedefined;         /* (S) */
+		public uint8 nups;                  /* (u) number of upvalues */
+		public uint8 nparams;               /* (u) number of parameters */
+		public char8 isvararg;              /* (u) */
+		public char8 istailcall;            /* (t) */
+		public char8[lua.IDSIZE] short_src; /* (S) */
+		/* private part */
+		public void* i_ci;                  /* active function */
+		
+		public this(int event, char8* name, char8* namewhat, char8* what, char8* source, int currentline, int linedefined, int lastlinedefined, uint8 nups,
+					uint8 nparams, char8 isvararg, char8 istailcall, char8[lua.IDSIZE] short_src, void* i_ci)
+		{
+		    this.event = event;
+		    this.name = name;
+		    this.namewhat = namewhat;
+		    this.what = what;
+		    this.source = source;
+		    this.currentline = currentline;
+		    this.linedefined = linedefined;
+		    this.lastlinedefined = lastlinedefined;
+		    this.nups = nups;
+		    this.nparams = nparams;
+		    this.isvararg = isvararg; 
+		    this.istailcall = istailcall;
+		    this.short_src = short_src;
+		    this.i_ci = i_ci;
+		}
 	}
 
 	[CRepr]
@@ -314,6 +356,37 @@ namespace lua535_beef
 		public uint16 nCcalls;      /* number of nested C calls */
 		public int hookmask;
 		public lu_byte allowhook;
+		
+		public this(GCObject* next, lu_byte tt, lu_byte marked, uint16 nci, lu_byte status, StkId top, void* l_G, void* ci, Instruction* oldpc,
+					StkId stack_last, StkId _stack, void* openupval, GCObject* gclist, lua_State* twups, void* errorJmp, void* base_ci, lua_Hook hook,
+					ptrdiff_t errfunc, int stacksize, int basehookcount, int hookcount, uint16 nny, uint16 nCcalls, int hookmask, lu_byte allowhook)
+		{
+			this.next = next;
+			this.tt = tt;
+			this.marked = marked;
+			this.nci = nci;
+			this.status = status;
+			this.top = top;
+			this.l_G = l_G;
+			this.ci = ci;
+			this.oldpc = oldpc;
+			this.stack_last = stack_last;
+			this._stack = _stack;
+			this.openupval = openupval;
+			this.gclist = gclist;
+			this.twups = twups;
+			this.errorJmp = errorJmp;
+			this.base_ci = base_ci;
+			this.hook = hook;
+			this.errfunc = errfunc;
+			this.stacksize = stacksize;
+			this.basehookcount = basehookcount;
+			this.hookcount = hookcount;
+			this.nny = nny;
+			this.nCcalls = nCcalls;
+			this.hookmask = hookmask;
+			this.allowhook = allowhook;
+		}
 	}
 
 	/* =================================================================== */

@@ -11,6 +11,12 @@ namespace lua535_beef
 	public struct luaL_Reg {
 	  	public char8* name;
 	  	public lua_CFunction func;
+
+		public this(char8* name, lua_CFunction func)
+        {
+            this.name = name;
+            this.func = func;
+        }
 	}
 
 	/* }====================================================== */ 
@@ -23,11 +29,20 @@ namespace lua535_beef
 
 	[CRepr]
 	public struct luaL_Buffer {
-	  public char8* b;                     /* buffer address */
-	  public size_t size;                  /* buffer size */
-	  public size_t n;                     /* number of characters in buffer */
-	  public lua_State* L;
-	  public char8[lua.BUFFERSIZE] initb;  /* initial buffer */
+		public char8* b;                     /* buffer address */
+		public size_t size;                  /* buffer size */
+		public size_t n;                     /* number of characters in buffer */
+		public lua_State* L;
+		public char8[lua.BUFFERSIZE] initb;  /* initial buffer */
+
+		public this(char8* b, size_t size, size_t n, lua_State* L, char8[lua.BUFFERSIZE] initb)
+        {
+            this.b = b;
+            this.size = size;
+            this.n = n;
+            this.L = L;
+            this.initb = initb;
+        }
 	}
 
 	/* }====================================================== */ 
@@ -48,6 +63,12 @@ namespace lua535_beef
 	public struct luaL_Stream {
 		public void* f;  			 /* stream (NULL for incompletely created streams) */
 		public lua_CFunction closef; /* to close stream (NULL for closed streams) */
+
+		public this(void* f, lua_CFunction closef)
+        {
+            this.f = f;
+            this.closef = closef;
+        }
 	}
 
 	/* }====================================================== */

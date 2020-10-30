@@ -48,5 +48,13 @@ namespace lua535_beef
 			lauxlib.requiref(L, name.CStr(), fn, glb);
 			lua.pop(L, 1); // Pop is required because requiref leaves the lib table on the stack
 		}
+		[Inline]
+		public static void PushModule(lua_State* L, luaL_Reg[] funcs, bool glb)
+		{
+			for (luaL_Reg item in funcs) {
+				lauxlib.requiref(L, item.name, item.func, glb);
+				lua.pop(L, 1); // Pop is required because requiref leaves the lib table on the stack
+			}
+		}
 	}
 }
