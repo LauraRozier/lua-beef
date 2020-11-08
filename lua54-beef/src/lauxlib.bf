@@ -425,40 +425,40 @@ namespace lua54_beef
 		** =============================================================
 		*/
 
-		#if LUA_COMPAT_APIINTCASTS
-			[Inline]
-			public static lua_Unsigned checkunsigned(lua_State* L, int idx)
-			{
-				return (lua_Unsigned)checkinteger(L, idx);
-			}
-			[Inline]
-			public static lua_Unsigned optunsigned(lua_State* L, int idx, lua_Unsigned def)
-			{
-				return (lua_Unsigned)optinteger(L, idx, (lua_Integer)def);
-			}
+#if LUA_COMPAT_APIINTCASTS
+		[Inline]
+		public static lua_Unsigned checkunsigned(lua_State* L, int idx)
+		{
+			return (lua_Unsigned)checkinteger(L, idx);
+		}
+		[Inline]
+		public static lua_Unsigned optunsigned(lua_State* L, int idx, lua_Unsigned def)
+		{
+			return (lua_Unsigned)optinteger(L, idx, (lua_Integer)def);
+		}
 
-			[Inline]
-			public static int checkint(lua_State* L, int idx)
-			{
-				return (int)checkinteger(L, idx);
-			}
-			[Inline]
-			public static int optint(lua_State* L, int idx, int def)
-			{
-				return (int)optinteger(L, idx, def);
-			}
+		[Inline]
+		public static int checkint(lua_State* L, int idx)
+		{
+			return (int)checkinteger(L, idx);
+		}
+		[Inline]
+		public static int optint(lua_State* L, int idx, int def)
+		{
+			return (int)optinteger(L, idx, def);
+		}
 
-			[Inline]
-			public static int64 checklong(lua_State* L, int idx)
-			{
-				return (int64)checkinteger(L, idx);
-			}
-			[Inline]
-			public static int64 optlong(lua_State* L, int idx, int64 def)
-			{
-				return (int64)optinteger(L, idx, def);
-			}
-		#endif
+		[Inline]
+		public static int64 checklong(lua_State* L, int idx)
+		{
+			return (int64)checkinteger(L, idx);
+		}
+		[Inline]
+		public static int64 optlong(lua_State* L, int idx, int64 def)
+		{
+			return (int64)optinteger(L, idx, def);
+		}
+#endif
 
 		/* }============================================================ */
 	}

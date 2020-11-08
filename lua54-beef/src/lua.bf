@@ -43,52 +43,52 @@ namespace lua54_beef
 	/*
 	** By default, Lua on Windows use (some) specific Windows features
 	*/
-	#if !LUA_USE_C89 && BF_PLATFORM_WINDOWS && !BF_PLATFORM_WINDOWSCE
-		/* enable goodies for regular Windows */
-		#define LUA_USE_WINDOWS
-	#endif
+#if !LUA_USE_C89 && BF_PLATFORM_WINDOWS && !BF_PLATFORM_WINDOWSCE
+	/* enable goodies for regular Windows */
+	#define LUA_USE_WINDOWS
+#endif
 
-	#if !LUA_USE_C89 && BF_PLATFORM_LINUX
-		/* enable goodies for Linux */
-		#define LUA_USE_LINUX
-	#endif
+#if !LUA_USE_C89 && BF_PLATFORM_LINUX
+	/* enable goodies for Linux */
+	#define LUA_USE_LINUX
+#endif
 
-	#if !LUA_USE_C89 && BF_PLATFORM_MACOS
-		/* enable goodies for regular Windows */
-		#define LUA_USE_MACOSX
-	#endif
+#if !LUA_USE_C89 && BF_PLATFORM_MACOS
+	/* enable goodies for regular Windows */
+	#define LUA_USE_MACOSX
+#endif
 
-	#if LUA_USE_WINDOWS
-		/* enable support for DLL */
-		#define LUA_DL_DLL
-		/* broadly, Windows is C89 */
-		#define LUA_USE_C89
-	#endif
+#if LUA_USE_WINDOWS
+	/* enable support for DLL */
+	#define LUA_DL_DLL
+	/* broadly, Windows is C89 */
+	#define LUA_USE_C89
+#endif
 
-	#if LUA_USE_LINUX
-		#define LUA_USE_POSIX
-		/* needs an extra library: -ldl */
-		#define LUA_USE_DLOPEN
-		/* needs some extra libraries */
-		#define LUA_USE_READLINE
-	#endif
+#if LUA_USE_LINUX
+	#define LUA_USE_POSIX
+	/* needs an extra library: -ldl */
+	#define LUA_USE_DLOPEN
+	/* needs some extra libraries */
+	#define LUA_USE_READLINE
+#endif
 
-	#if LUA_USE_MACOSX
-		#define LUA_USE_POSIX
-		/* MacOS does not need -ldl */
-		#define LUA_USE_DLOPEN
-		/* needs an extra library: -lreadline */
-		#define LUA_USE_READLINE
-	#endif
+#if LUA_USE_MACOSX
+	#define LUA_USE_POSIX
+	/* MacOS does not need -ldl */
+	#define LUA_USE_DLOPEN
+	/* needs an extra library: -lreadline */
+	#define LUA_USE_READLINE
+#endif
 
 	/*
 	@@ LUA_C89_NUMBERS ensures that Lua uses the largest types available for
 	** C89 ('long' and 'double'); Windows always has '__int64', so it does
 	** not need to use this case.
 	*/
-	#if LUA_USE_C89 && !LUA_USE_WINDOWS
-		#define LUA_C89_NUMBERS
-	#endif
+#if LUA_USE_C89 && !LUA_USE_WINDOWS
+	#define LUA_C89_NUMBERS
+#endif
 
 	/*
 	** {==================================================================
@@ -102,71 +102,71 @@ namespace lua54_beef
 	** You can define it to get all options, or change specific options
 	** to fit your specific needs.
 	*/
-	#if LUA_COMPAT_5_2
-		/*
-		@@ LUA_COMPAT_MATHLIB controls the presence of several deprecated
-		** functions in the mathematical library.
-		*/
-		#define LUA_COMPAT_MATHLIB
+#if LUA_COMPAT_5_2
+	/*
+	@@ LUA_COMPAT_MATHLIB controls the presence of several deprecated
+	** functions in the mathematical library.
+	*/
+	#define LUA_COMPAT_MATHLIB
 
-		/*
-		@@ LUA_COMPAT_BITLIB controls the presence of library 'bit32'.
-		*/
-		#define LUA_COMPAT_BITLIB
+	/*
+	@@ LUA_COMPAT_BITLIB controls the presence of library 'bit32'.
+	*/
+	#define LUA_COMPAT_BITLIB
 
-		/*
-		@@ LUA_COMPAT_IPAIRS controls the effectiveness of the __ipairs metamethod.
-		*/
-		#define LUA_COMPAT_IPAIRS
+	/*
+	@@ LUA_COMPAT_IPAIRS controls the effectiveness of the __ipairs metamethod.
+	*/
+	#define LUA_COMPAT_IPAIRS
 
-		/*
-		@@ LUA_COMPAT_APIINTCASTS controls the presence of macros for
-		** manipulating other integer types (lua_pushunsigned, lua_tounsigned,
-		** luaL_checkint, luaL_checklong, etc.)
-		*/
-		#define LUA_COMPAT_APIINTCASTS
-	#endif
+	/*
+	@@ LUA_COMPAT_APIINTCASTS controls the presence of macros for
+	** manipulating other integer types (lua_pushunsigned, lua_tounsigned,
+	** luaL_checkint, luaL_checklong, etc.)
+	*/
+	#define LUA_COMPAT_APIINTCASTS
+#endif
 
-	#if LUA_COMPAT_5_1
-		/* Incompatibilities from 5.2 -> 5.3 */
-		#define LUA_COMPAT_MATHLIB
-		#define LUA_COMPAT_APIINTCASTS
+#if LUA_COMPAT_5_1
+	/* Incompatibilities from 5.2 -> 5.3 */
+	#define LUA_COMPAT_MATHLIB
+	#define LUA_COMPAT_APIINTCASTS
 
-		/*
-		@@ LUA_COMPAT_UNPACK controls the presence of global 'unpack'.
-		** You can replace it with 'table.unpack'.
-		*/
-		#define LUA_COMPAT_UNPACK
+	/*
+	@@ LUA_COMPAT_UNPACK controls the presence of global 'unpack'.
+	** You can replace it with 'table.unpack'.
+	*/
+	#define LUA_COMPAT_UNPACK
 
-		/*
-		@@ LUA_COMPAT_LOADERS controls the presence of table 'package.loaders'.
-		** You can replace it with 'package.searchers'.
-		*/
-		#define LUA_COMPAT_LOADERS
+	/*
+	@@ LUA_COMPAT_LOADERS controls the presence of table 'package.loaders'.
+	** You can replace it with 'package.searchers'.
+	*/
+	#define LUA_COMPAT_LOADERS
 
-		/*
-		@@ LUA_COMPAT_LOG10 defines the function 'log10' in the math library.
-		** You can rewrite 'log10(x)' as 'log(x, 10)'.
-		*/
-		#define LUA_COMPAT_LOG10
+	/*
+	@@ LUA_COMPAT_LOG10 defines the function 'log10' in the math library.
+	** You can rewrite 'log10(x)' as 'log(x, 10)'.
+	*/
+	#define LUA_COMPAT_LOG10
 
-		/*
-		@@ LUA_COMPAT_LOADSTRING defines the function 'loadstring' in the base
-		** library. You can rewrite 'loadstring(s)' as 'load(s)'.
-		*/
-		#define LUA_COMPAT_LOADSTRING
+	/*
+	@@ LUA_COMPAT_LOADSTRING defines the function 'loadstring' in the base
+	** library. You can rewrite 'loadstring(s)' as 'load(s)'.
+	*/
+	#define LUA_COMPAT_LOADSTRING
 
-		/*
-		@@ LUA_COMPAT_MAXN defines the function 'maxn' in the table library.
-		*/
-		#define LUA_COMPAT_MAXN
+	/*
+	@@ LUA_COMPAT_MAXN defines the function 'maxn' in the table library.
+	*/
+	#define LUA_COMPAT_MAXN
 
-		/*
-		@@ LUA_COMPAT_MODULE controls compatibility with previous
-		** module functions 'module' (Lua) and 'luaL_register' (C).
-		*/
-		#define LUA_COMPAT_MODULE
-	#endif
+	/*
+	@@ LUA_COMPAT_MODULE controls compatibility with previous
+	** module functions 'module' (Lua) and 'luaL_register' (C).
+	*/
+	#define LUA_COMPAT_MODULE
+#endif
 
 	/*
 	@@ LUA_COMPAT_FLOATSTRING makes Lua format integral floats without a
@@ -197,11 +197,11 @@ namespace lua54_beef
 	
 	public typealias ptrdiff_t    = void*;
 	public typealias intptr_t     = int*;
-	#if BF_64_BIT
+#if BF_64_BIT
 	public typealias size_t       = uint64;
-	#else
+#else
 	public typealias size_t       = uint32;
-	#endif
+#endif
 	public typealias va_list      = void*;
 
 	public typealias lu_byte      = uint8;
@@ -436,35 +436,35 @@ namespace lua54_beef
 		** non-conventional directories.
 		*/
 		public const String VDIR = VERSION_MAJOR + "." + VERSION_MINOR;
-		#if BF_PLATFORM_WINDOWS
-			/*
-			** In Windows, any exclamation mark ('!') in the path is replaced by the
-			** path of the directory of the executable file of the current process.
-			*/
-			public const String LDIR          = "!\\lua\\";
-			public const String CDIR          = "!\\";
-			public const String SHRDIR        = "!\\..\\share\\lua\\" + VDIR + "\\";
-			public const String PATH_DEFAULT  = LDIR + "?.lua;" + LDIR + "?\\init.lua;" + CDIR + "?.lua;" + CDIR + "?\\init.lua;" + SHRDIR + "?.lua;" + SHRDIR +
-												"?\\init.lua;.\\?.lua;.\\?\\init.lua";
-			public const String CPATH_DEFAULT = CDIR + "?.dll;" + CDIR + "..\\lib\\lua\\" + VDIR + "\\?.dll;" + CDIR + "loadall.dll;.\\?.dll";
-		#else
-			public const String ROOT          = "/usr/local/";
-			public const String LDIR          = ROOT + "share/lua/" + VDIR + "/";
-			public const String CDIR          = ROOT + "lib/lua/" + VDIR + "/";
-			public const String PATH_DEFAULT  = LDIR + "?.lua;" + LDIR + "?/init.lua;" + CDIR + "?.lua;" + CDIR + "?/init.lua;./?.lua;./?/init.lua";
-			public const String CPATH_DEFAULT = CDIR + "?.so;" + CDIR + "loadall.so;./?.so";
-		#endif
+#if BF_PLATFORM_WINDOWS
+		/*
+		** In Windows, any exclamation mark ('!') in the path is replaced by the
+		** path of the directory of the executable file of the current process.
+		*/
+		public const String LDIR          = "!\\lua\\";
+		public const String CDIR          = "!\\";
+		public const String SHRDIR        = "!\\..\\share\\lua\\" + VDIR + "\\";
+		public const String PATH_DEFAULT  = LDIR + "?.lua;" + LDIR + "?\\init.lua;" + CDIR + "?.lua;" + CDIR + "?\\init.lua;" + SHRDIR + "?.lua;" + SHRDIR +
+											"?\\init.lua;.\\?.lua;.\\?\\init.lua";
+		public const String CPATH_DEFAULT = CDIR + "?.dll;" + CDIR + "..\\lib\\lua\\" + VDIR + "\\?.dll;" + CDIR + "loadall.dll;.\\?.dll";
+#else
+		public const String ROOT          = "/usr/local/";
+		public const String LDIR          = ROOT + "share/lua/" + VDIR + "/";
+		public const String CDIR          = ROOT + "lib/lua/" + VDIR + "/";
+		public const String PATH_DEFAULT  = LDIR + "?.lua;" + LDIR + "?/init.lua;" + CDIR + "?.lua;" + CDIR + "?/init.lua;./?.lua;./?/init.lua";
+		public const String CPATH_DEFAULT = CDIR + "?.so;" + CDIR + "loadall.so;./?.so";
+#endif
 
 		/*
 		@@ LUA_DIRSEP is the directory separator (for submodules).
 		** CHANGE it if your machine does not use "/" as the directory separator
 		** and is not Windows. (On Windows Lua automatically uses "\".)
 		*/
-		#if BF_PLATFORM_WINDOWS
-			public const String DIRSEP = "\\";
-		#else
-			public const String DIRSEP = "/";
-		#endif
+#if BF_PLATFORM_WINDOWS
+		public const String DIRSEP = "\\";
+#else
+		public const String DIRSEP = "/";
+#endif
 
 		/* }================================================================== */
 
@@ -474,43 +474,43 @@ namespace lua54_beef
 		** ===================================================================
 		*/
 
-		#if LUA_COMPAT_5_1
-			/*
-			@@ macro 'lua_cpcall' emulates deprecated function lua_cpcall.
-			** You can call your C function directly (with light C functions).
-			*/
-			[Inline]
-			public static void cpcall(lua_State* L, lua_CFunction f, void* u) {
-				pushcfunction(L, f);
-				pushlightuserdata(L, u);
-				pcall(L, 1, 0, 0);
-			}
+#if LUA_COMPAT_5_1
+		/*
+		@@ macro 'lua_cpcall' emulates deprecated function lua_cpcall.
+		** You can call your C function directly (with light C functions).
+		*/
+		[Inline]
+		public static void cpcall(lua_State* L, lua_CFunction f, void* u) {
+			pushcfunction(L, f);
+			pushlightuserdata(L, u);
+			pcall(L, 1, 0, 0);
+		}
 
-			/*
-			@@ The following macros supply trivial compatibility for some
-			** changes in the API. The macros themselves document how to
-			** change your code to avoid using them.
-			*/
-			[Inline]
-			public static size_t strlen(lua_State* L, int i) {
-				return rawlen(L, i);
-			}
+		/*
+		@@ The following macros supply trivial compatibility for some
+		** changes in the API. The macros themselves document how to
+		** change your code to avoid using them.
+		*/
+		[Inline]
+		public static size_t strlen(lua_State* L, int i) {
+			return rawlen(L, i);
+		}
 
-			[Inline]
-			public static size_t objlen(lua_State* L, int i) {
-				return rawlen(L, i);
-			}
+		[Inline]
+		public static size_t objlen(lua_State* L, int i) {
+			return rawlen(L, i);
+		}
 
-			[Inline]
-			public static int equal(lua_State* L, int idx1, int idx2) {
-				return compare(L, idx1, idx2, LUA_OPEQ);
-			}
+		[Inline]
+		public static int equal(lua_State* L, int idx1, int idx2) {
+			return compare(L, idx1, idx2, LUA_OPEQ);
+		}
 
-			[Inline]
-			public static int lessthan(lua_State* L, int idx1, int idx2) {
-				return compare(L, idx1, idx2, LUA_OPLT);
-			}
-		#endif
+		[Inline]
+		public static int lessthan(lua_State* L, int idx1, int idx2) {
+			return compare(L, idx1, idx2, LUA_OPLT);
+		}
+#endif
 
 		/* }================================================================== */
 
@@ -554,12 +554,6 @@ namespace lua54_beef
 		public const int BUFFERSIZE = (int)(0x80 * sizeof(void*) * sizeof(lua_Integer));
 
 		/* =================================================================== */
-
-		/*#if BF_PLATFORM_WINDOWS
-			public const String LUA_LIB = "lua53.dll";
-		#else
-			public const String LUA_LIB = "liblua53.so";
-		#endif*/
 
 		public const String VERSION_MAJOR     = "5";
 		public const String VERSION_MINOR     = "4";
@@ -623,13 +617,13 @@ namespace lua54_beef
 		public const int RIDX_GLOBALS    = 2;
 		public const int RIDX_LAST       = RIDX_GLOBALS;
 
-		#if BF_PLATFORM_WINDOWS
-			public const String LIB_DLL = "lua54.dll";
-		#elif BF_PLATFORM_LINUX
-			public const String LIB_DLL = "liblua54.so";
-		#else
-			#error This platform is incompatible
-		#endif
+#if BF_PLATFORM_WINDOWS
+		public const String LIB_DLL = "lua54.dll";
+#elif BF_PLATFORM_LINUX
+		public const String LIB_DLL = "liblua54.so";
+#else
+		#error This platform is incompatible
+#endif
 
 		/* Results in "unresolved" error
 		[Import(LIB_DLL), LinkName("lua_ident")]
@@ -1044,23 +1038,23 @@ namespace lua54_beef
 		** compatibility macros
 		** ===============================================================
 		*/
-		#if LUA_COMPAT_APIINTCASTS
-			[Inline]
-			public static void pushunsigned(lua_State* L, lua_Integer val)
-			{
-				pushinteger(L, (lua_Integer)val);
-			}
-			[Inline]
-			public static lua_Unsigned tounsignedx(lua_State* L, int idx, bool* isnum)
-			{
-				return (lua_Unsigned)tointegerx(L, idx, isnum);
-			}
-			[Inline]
-			public static lua_Unsigned tounsigned(lua_State* L, int idx)
-			{
-				return tounsignedx(L, idx, null);
-			}
-		#endif
+#if LUA_COMPAT_APIINTCASTS
+		[Inline]
+		public static void pushunsigned(lua_State* L, lua_Integer val)
+		{
+			pushinteger(L, (lua_Integer)val);
+		}
+		[Inline]
+		public static lua_Unsigned tounsignedx(lua_State* L, int idx, bool* isnum)
+		{
+			return (lua_Unsigned)tointegerx(L, idx, isnum);
+		}
+		[Inline]
+		public static lua_Unsigned tounsigned(lua_State* L, int idx)
+		{
+			return tounsignedx(L, idx, null);
+		}
+#endif
 
 		[Inline]
 		public static void* newuserdata(lua_State* L, size_t s)
@@ -1142,7 +1136,7 @@ namespace lua54_beef
 /* }====================================================================== */
 
 /******************************************************************************
-* Copyright (C) 1994-2018 Lua.org, PUC-Rio.
+* Copyright (C) 1994-2020 Lua.org, PUC-Rio.
 *
 * Permission is hereby granted, free of charge, to any person obtaining
 * a copy of this software and associated documentation files (the

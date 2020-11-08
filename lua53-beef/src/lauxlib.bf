@@ -332,18 +332,18 @@ namespace lua53_beef
 		/* }====================================================== */
 
 		/* compatibility with old module system */
-		#if LUA_COMPAT_MODULE
-			[Import(lua.LIB_DLL), LinkName("luaL_pushmodule")]
-			public static extern void pushmodule(lua_State* L, char8* modname, int sizehint);
-			[Import(lua.LIB_DLL), LinkName("luaL_openlib")]
-			public static extern void openlib(lua_State* L, char8* libname, luaL_Reg* l, int nup);
+#if LUA_COMPAT_MODULE
+		[Import(lua.LIB_DLL), LinkName("luaL_pushmodule")]
+		public static extern void pushmodule(lua_State* L, char8* modname, int sizehint);
+		[Import(lua.LIB_DLL), LinkName("luaL_openlib")]
+		public static extern void openlib(lua_State* L, char8* libname, luaL_Reg* l, int nup);
 
-			[Inline]
-			public static void register(lua_State* L, char8* n, luaL_Reg* l)
-			{
-				openlib(L, n, l, 0);
-			}
-		#endif
+		[Inline]
+		public static void register(lua_State* L, char8* n, luaL_Reg* l)
+		{
+			openlib(L, n, l, 0);
+		}
+#endif
 		
 		/* }================================================================== */
 		
@@ -382,40 +382,40 @@ namespace lua53_beef
 		** =============================================================
 		*/
 
-		#if LUA_COMPAT_APIINTCASTS
-			[Inline]
-			public static lua_Unsigned checkunsigned(lua_State* L, int idx)
-			{
-				return (lua_Unsigned)checkinteger(L, idx);
-			}
-			[Inline]
-			public static lua_Unsigned optunsigned(lua_State* L, int idx, lua_Unsigned def)
-			{
-				return (lua_Unsigned)optinteger(L, idx, (lua_Integer)def);
-			}
+#if LUA_COMPAT_APIINTCASTS
+		[Inline]
+		public static lua_Unsigned checkunsigned(lua_State* L, int idx)
+		{
+			return (lua_Unsigned)checkinteger(L, idx);
+		}
+		[Inline]
+		public static lua_Unsigned optunsigned(lua_State* L, int idx, lua_Unsigned def)
+		{
+			return (lua_Unsigned)optinteger(L, idx, (lua_Integer)def);
+		}
 
-			[Inline]
-			public static int checkint(lua_State* L, int idx)
-			{
-				return (int)checkinteger(L, idx);
-			}
-			[Inline]
-			public static int optint(lua_State* L, int idx, int def)
-			{
-				return (int)optinteger(L, idx, def);
-			}
+		[Inline]
+		public static int checkint(lua_State* L, int idx)
+		{
+			return (int)checkinteger(L, idx);
+		}
+		[Inline]
+		public static int optint(lua_State* L, int idx, int def)
+		{
+			return (int)optinteger(L, idx, def);
+		}
 
-			[Inline]
-			public static int64 checklong(lua_State* L, int idx)
-			{
-				return (int64)checkinteger(L, idx);
-			}
-			[Inline]
-			public static int64 optlong(lua_State* L, int idx, int64 def)
-			{
-				return (int64)optinteger(L, idx, def);
-			}
-		#endif
+		[Inline]
+		public static int64 checklong(lua_State* L, int idx)
+		{
+			return (int64)checkinteger(L, idx);
+		}
+		[Inline]
+		public static int64 optlong(lua_State* L, int idx, int64 def)
+		{
+			return (int64)optinteger(L, idx, def);
+		}
+#endif
 
 		/* }============================================================ */
 	}
