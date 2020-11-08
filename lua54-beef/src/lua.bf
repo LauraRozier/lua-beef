@@ -9,7 +9,7 @@
 */
 using System;
 
-namespace lua535_beef
+namespace lua54_beef
 {
 	/*
 	** ===================================================================
@@ -551,9 +551,9 @@ namespace lua535_beef
 		#endif*/
 
 		public const String VERSION_MAJOR   = "5";
-		public const String VERSION_MINOR   = "3";
+		public const String VERSION_MINOR   = "4";
 		public const uint VERSION_NUM     = 503;
-		public const String VERSION_RELEASE = "5";
+		public const String VERSION_RELEASE = "1";
 
 		public const String VERSION         = "Lua " + VERSION_MAJOR + "." + VERSION_MINOR;
 		public const String RELEASE         = VERSION + "." + VERSION_RELEASE;

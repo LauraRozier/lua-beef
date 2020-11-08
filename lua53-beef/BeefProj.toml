@@ -1,10 +1,10 @@
 FileVersion = 1
 
 [Project]
-Name = "lua535-beef"
+Name = "lua53-beef"
 TargetType = "BeefLib"
-StartupObject = "lua535_beef.Program"
-DefaultNamespace = "lua535_beef"
+StartupObject = "lua53_beef.Program"
+DefaultNamespace = "lua53_beef"
 
 [Configs.Debug.Win32]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x86/lua53.dll\")"]

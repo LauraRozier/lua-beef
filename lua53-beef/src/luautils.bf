@@ -5,7 +5,7 @@
 */
 using System;
 
-namespace lua535_beef
+namespace lua53_beef
 {
 	public abstract class luautils
 	{

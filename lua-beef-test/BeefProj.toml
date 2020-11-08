@@ -1,0 +1,27 @@
+FileVersion = 1
+Dependencies = {corlib = "*", lua53-beef = "*", lua54-beef = "*"}
+
+[Project]
+Name = "lua-beef-test"
+StartupObject = "lua_beef_test.Program"
+
+[Configs.Debug.Win32]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+
+[Configs.Debug.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+
+[Configs.Debug.Linux64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+
+[Configs.Release.Win32]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+OptimizationLevel = "O2"
+
+[Configs.Release.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+OptimizationLevel = "O2"
+
+[Configs.Release.Linux64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+OptimizationLevel = "O2"

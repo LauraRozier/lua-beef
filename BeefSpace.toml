@@ -1,2 +1,11 @@
 FileVersion = 1
-Projects = {lua535-beef = {Path = "."}}
+Projects = {lua-beef-test = {Path = "lua-beef-test"}, lua53-beef = {Path = "lua53-beef"}, lua54-beef = {Path = "lua54-beef"}}
+
+[Workspace]
+StartupProject = "lua-beef-test"
+
+[Configs.Test.Win32]
+ConfigSelections = {lua-beef-test = {Config = "Debug"}}
+
+[Configs.Test.Win64]
+ConfigSelections = {lua-beef-test = {Config = "Debug"}}

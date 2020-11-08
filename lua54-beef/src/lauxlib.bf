@@ -5,7 +5,7 @@
 */
 using System;
 
-namespace lua535_beef
+namespace lua54_beef
 { 
 	[CRepr]
 	public struct luaL_Reg {
