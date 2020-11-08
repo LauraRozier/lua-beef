@@ -6,7 +6,7 @@
 using System;
 
 namespace lua54_beef
-{ 
+{
 	[CRepr]
 	public struct luaL_Reg {
 	  	public char8* name;
@@ -33,7 +33,25 @@ namespace lua54_beef
 		public size_t size;                  /* buffer size */
 		public size_t n;                     /* number of characters in buffer */
 		public lua_State* L;
-		public char8[lua.BUFFERSIZE] initb;  /* initial buffer */
+		public init_struct init;
+
+		[Union]
+		public struct init_struct {
+			/*
+			@@ LUAI_MAXALIGN defines fields that, when used in a union, ensure
+			** maximum alignment for the other items in that union.
+			*/
+			public lua_Number n;
+			public double u;
+			public void* s;
+			public lua_Integer i;
+#if BF_PLATFORM_WINDOWS
+			public int32 l;  /* ensure maximum alignment for buffer */
+#else
+			public int64 l;  /* ensure maximum alignment for buffer */
+#endif
+			public char8[lua.BUFFERSIZE] b;  /* initial buffer */
+		}
 
 		public this(char8* b, size_t size, size_t n, lua_State* L, char8[lua.BUFFERSIZE] initb)
         {
@@ -41,7 +59,8 @@ namespace lua54_beef
             this.size = size;
             this.n = n;
             this.L = L;
-            this.initb = initb;
+			init = .();
+            this.init.b = initb;
         }
 	}
 
@@ -75,6 +94,9 @@ namespace lua54_beef
 
 	public abstract class lauxlib
 	{
+		/* global table */
+		public const String LUA_GNAME     = "_G";
+
 		/* extra error code for 'luaL_loadfilex' */
 		public const int ERRFILE          = lua.ERRERR + 1;
 
@@ -100,6 +122,8 @@ namespace lua54_beef
 		public static extern int callmeta(lua_State* L, int obj, char8* e);
 		[Import(lua.LIB_DLL), LinkName("luaL_tolstring")]
 		public static extern char8* tolstring(lua_State* L, int idx, size_t *len);
+		[Import(lua.LIB_DLL), LinkName("luaL_typeerror")]
+		public static extern int typeerror(lua_State* L, int arg, char8* tname);
 		[Import(lua.LIB_DLL), LinkName("luaL_argerror")]
 		public static extern int argerror(lua_State* L, int arg, char8* extramsg);
 		[Import(lua.LIB_DLL), LinkName("luaL_checklstring")]
@@ -174,6 +198,9 @@ namespace lua54_beef
 		[Import(lua.LIB_DLL), LinkName("luaL_len")]
 		public static extern lua_Integer len(lua_State* L, int idx);
 
+		[Import(lua.LIB_DLL), LinkName("luaL_addgsub")]
+		public static extern void addgsub(luaL_Buffer* b, char8* s, char8* p, char8* r);
+
 		[Import(lua.LIB_DLL), LinkName("luaL_gsub")]
 		public static extern char8* gsub(lua_State* L, char8* s, char8* p, char8* r);
 
@@ -214,6 +241,13 @@ namespace lua54_beef
 		{
 			if (!cond)
 				argerror(L, idx, extramsg.CStr());
+		}
+
+		[Inline]
+		public static void argexpected(lua_State* L, bool cond, int idx, String tname)
+		{
+			if (!cond)
+				typeerror(L, idx, tname.CStr());
 		}
 
 		[Inline]
@@ -268,11 +302,30 @@ namespace lua54_beef
 			 return loadbufferx(L, buff.CStr(), sz, name.CStr(), null);
 		}
 
+		[Inline]
+		/* push the value used to represent failure/error */
+		public static void pushfail(lua_State* L)
+ 		{
+			 lua.pushnil(L);
+		}
+
 		/*
 		** {======================================================
 		** Generic Buffer manipulation
 		** =======================================================
 		*/
+
+		[Inline]
+		public static size_t bufflen(luaL_Buffer* bf)
+		{
+			return bf.n;
+		}
+
+		[Inline]
+		public static char8* buffaddr(luaL_Buffer* bf)
+		{
+			return bf.b;
+		}
 
 		// #define luaL_addchar(B,c) ((void)((B)->n < (B)->size || luaL_prepbuffsize((B), 1)), ((B)->b[(B)->n++] = (c)))
 		[Inline]
@@ -288,6 +341,12 @@ namespace lua54_beef
 		public static void addsize(luaL_Buffer* B, size_t sz)
 		{
 			B.n += sz;
+		}
+
+		[Inline]
+		public static void buffsub(luaL_Buffer* B, size_t s)
+		{
+			B.n -= s;
 		}
 
 		[Import(lua.LIB_DLL), LinkName("luaL_buffinit")]
@@ -330,22 +389,6 @@ namespace lua54_beef
 		public const String FILEHANDLE = "FILE*";
 
 		/* }====================================================== */
-
-		/* compatibility with old module system */
-		#if LUA_COMPAT_MODULE
-			[Import(lua.LIB_DLL), LinkName("luaL_pushmodule")]
-			public static extern void pushmodule(lua_State* L, char8* modname, int sizehint);
-			[Import(lua.LIB_DLL), LinkName("luaL_openlib")]
-			public static extern void openlib(lua_State* L, char8* libname, luaL_Reg* l, int nup);
-
-			[Inline]
-			public static void register(lua_State* L, char8* n, luaL_Reg* l)
-			{
-				openlib(L, n, l, 0);
-			}
-		#endif
-		
-		/* }================================================================== */
 		
 		/*
 		** {==================================================================

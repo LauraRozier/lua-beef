@@ -237,6 +237,11 @@ namespace lua54_beef
 	*/
 	function void* lua_Alloc(void* ud, void* ptr, size_t osize, size_t nsize);
 
+	/*
+	** Type for warning functions
+	*/
+	function void* lua_WarnFunction(void* ud, char8* msg, int tocont);
+
 	[CRepr]
 	public struct GCObject
 	{
@@ -297,6 +302,7 @@ namespace lua54_beef
 		public char8* namewhat;             /* (n) 'global', 'local', 'field', 'method' */
 		public char8* what;                 /* (S) 'Lua', 'C', 'main', 'tail' */
 		public char8* source;               /* (S) */
+  		public size_t srclen;               /* (S) */
 		public int currentline;             /* (l) */
 		public int linedefined;             /* (S) */
 		public int lastlinedefined;         /* (S) */
@@ -304,18 +310,21 @@ namespace lua54_beef
 		public uint8 nparams;               /* (u) number of parameters */
 		public char8 isvararg;              /* (u) */
 		public char8 istailcall;            /* (t) */
+		public uint16 ftransfer;            /* (r) index of first value transferred */
+		public uint16 ntransfer;            /* (r) number of transferred values */
 		public char8[lua.IDSIZE] short_src; /* (S) */
 		/* private part */
 		public void* i_ci;                  /* active function */
 		
-		public this(int event, char8* name, char8* namewhat, char8* what, char8* source, int currentline, int linedefined, int lastlinedefined, uint8 nups,
-					uint8 nparams, char8 isvararg, char8 istailcall, char8[lua.IDSIZE] short_src, void* i_ci)
+		public this(int event, char8* name, char8* namewhat, char8* what, char8* source, size_t srclen, int currentline, int linedefined, int lastlinedefined,
+					uint8 nups, uint8 nparams, char8 isvararg, char8 istailcall, uint16 ftransfer, uint16 ntransfer, char8[lua.IDSIZE] short_src, void* i_ci)
 		{
 		    this.event = event;
 		    this.name = name;
 		    this.namewhat = namewhat;
 		    this.what = what;
 		    this.source = source;
+		    this.srclen = srclen;
 		    this.currentline = currentline;
 		    this.linedefined = linedefined;
 		    this.lastlinedefined = lastlinedefined;
@@ -324,6 +333,8 @@ namespace lua54_beef
 		    this.isvararg = isvararg; 
 		    this.istailcall = istailcall;
 		    this.short_src = short_src;
+		    this.ftransfer = ftransfer;
+		    this.ntransfer = ntransfer;
 		    this.i_ci = i_ci;
 		}
 	}
@@ -550,10 +561,11 @@ namespace lua54_beef
 			public const String LUA_LIB = "liblua53.so";
 		#endif*/
 
-		public const String VERSION_MAJOR   = "5";
-		public const String VERSION_MINOR   = "4";
-		public const uint VERSION_NUM     = 503;
-		public const String VERSION_RELEASE = "1";
+		public const String VERSION_MAJOR     = "5";
+		public const String VERSION_MINOR     = "4";
+		public const String VERSION_RELEASE   = "1";
+		public const uint VERSION_NUM         = 504;
+		public const uint VERSION_RELEASE_NUM = VERSION_NUM * 100 + 0;
 
 		public const String VERSION         = "Lua " + VERSION_MAJOR + "." + VERSION_MINOR;
 		public const String RELEASE         = VERSION + "." + VERSION_RELEASE;
@@ -584,8 +596,7 @@ namespace lua54_beef
 		public const int ERRRUN    = 2;
 		public const int ERRSYNTAX = 3;
 		public const int ERRMEM    = 4;
-		public const int ERRGCMM   = 5;
-		public const int ERRERR    = 6;
+		public const int ERRERR    = 5;
 
 		/*
 		** basic types
@@ -602,7 +613,7 @@ namespace lua54_beef
 		public const int TUSERDATA      = 7;
 		public const int TTHREAD        = 8;
 
-		public const int NUMTAGS        = 9;
+		public const int NUMTYPES       = 9;
 
 		/* minimum Lua stack available to a C function */
 		public const int MINSTACK = 20;
@@ -613,9 +624,9 @@ namespace lua54_beef
 		public const int RIDX_LAST       = RIDX_GLOBALS;
 
 		#if BF_PLATFORM_WINDOWS
-			public const String LIB_DLL = "lua53.dll";
+			public const String LIB_DLL = "lua54.dll";
 		#elif BF_PLATFORM_LINUX
-			public const String LIB_DLL = "liblua53.so";
+			public const String LIB_DLL = "liblua54.so";
 		#else
 			#error This platform is incompatible
 		#endif
@@ -634,12 +645,14 @@ namespace lua54_beef
 		public extern static void close(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_newthread")]
 		public extern static lua_State* newthread(lua_State* L);
+		[Import(LIB_DLL), LinkName("lua_resetthread")]
+		public extern static int resetthread(lua_State* L);
 
 		[Import(LIB_DLL), LinkName("lua_atpanic")]
 		public extern static lua_CFunction atpanic(lua_State* L, lua_CFunction panicf);
 
 		[Import(LIB_DLL), LinkName("lua_version")]
-		public extern static lua_Number* version(lua_State* L);
+		public extern static lua_Number version(lua_State* L);
 
 		/*
 		** basic stack manipulation
@@ -689,7 +702,7 @@ namespace lua54_beef
 		[Import(LIB_DLL), LinkName("lua_tolstring")]
 		public extern static char8* tolstring(lua_State* L, int idx, size_t* len);
 		[Import(LIB_DLL), LinkName("lua_rawlen")]
-		public extern static size_t rawlen(lua_State* L, int idx);
+		public extern static lua_Unsigned rawlen(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_tocfunction")]
 		public extern static lua_CFunction tocfunction(lua_State* L, int idx);
 		[Import(LIB_DLL), LinkName("lua_touserdata")]
@@ -775,12 +788,12 @@ namespace lua54_beef
 
 		[Import(LIB_DLL), LinkName("lua_createtable")]
 		public extern static void createtable(lua_State* L, int narr, int nrec);
-		[Import(LIB_DLL), LinkName("lua_newuserdata")]
-		public extern static void* newuserdata(lua_State* L, size_t sz);
+		[Import(LIB_DLL), LinkName("lua_newuserdatauv")]
+		public extern static void* newuserdatauv(lua_State* L, size_t sz, int nuvalue);
 		[Import(LIB_DLL), LinkName("lua_getmetatable")]
 		public extern static int getmetatable(lua_State* L, int objindex);
-		[Import(LIB_DLL), LinkName("lua_getuservalue")]
-		public extern static int getuservalue(lua_State* L, int idx);
+		[Import(LIB_DLL), LinkName("lua_getiuservalue")]
+		public extern static int getiuservalue(lua_State* L, int idx, int n);
 
 		/*
 		** set functions (stack -> Lua)
@@ -801,8 +814,8 @@ namespace lua54_beef
 		public extern static void rawsetp(lua_State* L, int idx, void* p);
 		[Import(LIB_DLL), LinkName("lua_setmetatable")]
 		public extern static int setmetatable(lua_State* L, int objindex);
-		[Import(LIB_DLL), LinkName("lua_setuservalue")]
-		public extern static void setuservalue(lua_State* L, int idx);
+		[Import(LIB_DLL), LinkName("lua_setiuservalue")]
+		public extern static int setiuservalue(lua_State* L, int idx, int n);
 
 		/*
 		** 'load' and 'call' functions (load and run Lua code)
@@ -835,7 +848,7 @@ namespace lua54_beef
 		[Import(LIB_DLL), LinkName("lua_yieldk")]
 		public extern static int yieldk(lua_State* L, int nresults, lua_KContext ctx, lua_KFunction k);
 		[Import(LIB_DLL), LinkName("lua_resume")]
-		public extern static int resume(lua_State* L, lua_State* from, int narg);
+		public extern static int resume(lua_State* L, lua_State* from, int narg, int* nres);
 		[Import(LIB_DLL), LinkName("lua_status")]
 		public extern static int status(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_isyieldable")]
@@ -846,6 +859,14 @@ namespace lua54_beef
 		{
 			return yieldk(L, nresults, null, null);
 		}
+
+		/*
+		** Warning-related functions
+		*/
+		[Import(LIB_DLL), LinkName("lua_setwarnf")]
+		public extern static void setwarnf(lua_State* L, lua_WarnFunction f, void* ud);
+		[Import(LIB_DLL), LinkName("lua_warning")]
+		public extern static void warning(lua_State* L, char8* msg, int tocont);
 
 		/*
 		** garbage-collection function and options
@@ -859,9 +880,11 @@ namespace lua54_beef
 		public const int GCSETPAUSE   = 6;
 		public const int GCSETSTEPMUL = 7;
 		public const int GCISRUNNING  = 9;
+		public const int GCGEN        = 10;
+		public const int GCINC        = 11;
 
 		[Import(LIB_DLL), LinkName("lua_gc")]
-		public extern static int gc(lua_State* L, int what, int data);
+		public extern static int gc(lua_State* L, int what, params Object[] args);
 
 		/*
 		** miscellaneous functions
@@ -884,6 +907,9 @@ namespace lua54_beef
 		public extern static lua_Alloc getallocf(lua_State* L, void** ud);
 		[Import(LIB_DLL), LinkName("lua_setallocf")]
 		public extern static void setallocf(lua_State* L, lua_Alloc f, void* ud);
+		
+		[Import(LIB_DLL), LinkName("lua_toclose")]
+		public extern static void toclose(lua_State* L, int idx);
 
 		/*
 		** {==============================================================
@@ -1015,7 +1041,7 @@ namespace lua54_beef
 
 		/*
 		** {==============================================================
-		** compatibility macros for unsigned conversions
+		** compatibility macros
 		** ===============================================================
 		*/
 		#if LUA_COMPAT_APIINTCASTS
@@ -1035,6 +1061,25 @@ namespace lua54_beef
 				return tounsignedx(L, idx, null);
 			}
 		#endif
+
+		[Inline]
+		public static void* newuserdata(lua_State* L, size_t s)
+		{
+			return newuserdatauv(L, s, 1);
+		}
+		[Inline]
+		public static int getuservalue(lua_State* L, int idx)
+		{
+			return getiuservalue(L, idx, 1);
+		}
+		[Inline]
+		public static int setuservalue(lua_State* L, int idx)
+		{
+			return setiuservalue(L, idx, 1);
+		}
+
+		public const int NUMTAGS = NUMTYPES;
+
 		/* }============================================================== */
 
 		/*
@@ -1086,6 +1131,9 @@ namespace lua54_beef
 		public extern static int gethookmask(lua_State* L);
 		[Import(LIB_DLL), LinkName("lua_gethookcount")]
 		public extern static int gethookcount(lua_State* L);
+
+		[Import(LIB_DLL), LinkName("lua_setcstacklimit")]
+		public extern static int setcstacklimit(lua_State* L, uint limit);
 
 		/* }====================================================================== */
 	}

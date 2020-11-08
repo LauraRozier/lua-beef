@@ -1,4 +1,4 @@
-using lua53_beef;
+using lua54_beef;
 
 namespace lua_beef_test
 {

@@ -68,14 +68,6 @@ namespace lua54_beef
 			return open_utf8(L);
 		}
 
-		[Import(lua.LIB_DLL), LinkName("luaopen_bit32")]
-		private static extern int open_bit32(lua_State* L);
-		public const String BITLIBNAME = "bit32";
-		public static int OpenBit32(lua_State* L)
-		{
-			return open_bit32(L);
-		}
-
 		[Import(lua.LIB_DLL), LinkName("luaopen_math")]
 		private static extern int open_math(lua_State* L);
 		public const String MATHLIBNAME = "math";

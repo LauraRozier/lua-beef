@@ -96,7 +96,7 @@ namespace lua_beef_test
 				.(lualib.OSLIBNAME,   => lualib.OpenOs),
 				.(lualib.STRLIBNAME,  => lualib.OpenString),
 				.(lualib.UTF8LIBNAME, => lualib.OpenUtf8),
-				.(lualib.BITLIBNAME,  => lualib.OpenBit32),
+				//.(lualib.BITLIBNAME,  => lualib.OpenBit32), // Removed in Lua 5.4
 				.(lualib.MATHLIBNAME, => lualib.OpenMath),
 				.(lualib.DBLIBNAME,   => lualib.OpenDebug),
 				.(lualib.LOADLIBNAME, => lualib.OpenPackage)
@@ -110,7 +110,7 @@ namespace lua_beef_test
 			// luautils.PushModule(fLuaState, lualib.OSLIBNAME,   => lualib.OpenOs,        true);
 			// luautils.PushModule(fLuaState, lualib.STRLIBNAME,  => lualib.OpenString,    true);
 			// luautils.PushModule(fLuaState, lualib.UTF8LIBNAME, => lualib.OpenUtf8,      true);
-			// luautils.PushModule(fLuaState, lualib.BITLIBNAME,  => lualib.OpenBit32,     true);
+			// luautils.PushModule(fLuaState, lualib.BITLIBNAME,  => lualib.OpenBit32,     true); // Removed in Lua 5.4
 			// luautils.PushModule(fLuaState, lualib.MATHLIBNAME, => lualib.OpenMath,      true);
 			// luautils.PushModule(fLuaState, lualib.DBLIBNAME,   => lualib.OpenDebug,     true);
 			// luautils.PushModule(fLuaState, lualib.LOADLIBNAME, => lualib.OpenPackage,   true);
