@@ -6,22 +6,28 @@ Name = "lua-beef-test"
 StartupObject = "lua_beef_test.Program"
 
 [Configs.Debug.Win32]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
 
 [Configs.Debug.Win64]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
 
 [Configs.Debug.Linux64]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
 
 [Configs.Release.Win32]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
-OptimizationLevel = "O2"
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
 
 [Configs.Release.Win64]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
-OptimizationLevel = "O2"
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
 
-[Configs.Release.Linux64]
-PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/test.lua\", \"$(TargetDir)\")"]
-OptimizationLevel = "O2"
+[Configs.Paranoid.Win32]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+
+[Configs.Paranoid.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+
+[Configs.Test.Win32]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+
+[Configs.Test.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]

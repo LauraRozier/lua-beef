@@ -1,14 +1,28 @@
+// NOTE : If you change this, first clean, then build.
+#define USE_LUA54
+
 using System;
 using System.IO;
-using lua54_beef;
+#if USE_LUA54
+	using lua54_beef;
+#else
+	using lua53_beef;
+#endif
 
 namespace lua_beef_test
 {
 	class Program
 	{
 		private static lua_State* fLuaState;
-		private static String fExeDir    = new .() ~ delete _;
-		private const String TEST_SCRIPT = "test.lua";
+		private static String fExeDir                   = new .() ~ delete _;
+		private const String TEST_SCRIPT                = "test.lua";
+#if USE_LUA54
+		private const String TEST_SCRIPT_COMPILED       = "compiledLua.54.luac";
+		private const String TEST_SCRIPT_COMPILED_DEBUG = "compiledLua_d.54.luac";
+#else
+		private const String TEST_SCRIPT_COMPILED       = "compiledLua.53.luac";
+		private const String TEST_SCRIPT_COMPILED_DEBUG = "compiledLua_d.53.luac";
+#endif
 
 		static void Main()
 		{
@@ -18,6 +32,11 @@ namespace lua_beef_test
 			Path.GetDirectoryPath(tmp, fExeDir);
 			delete tmp;
 
+			/*---------------------------------------------------------------------------
+			** Lua from a text file
+			*/
+			
+			Console.WriteLine("DEBUG > Running LUA script using run-time compiler\n");
 			/** Initialize the Lua library and create the main Lua thread **/
 			fLuaState = lauxlib.newstate();
 			/* TODO: Custom alloc is broken, needs a working implementation. Throws "EXCEPTION_ACCESS_VIOLATION reading from 0xFFFFFFFF'FFFFFFFF" */
@@ -28,20 +47,54 @@ namespace lua_beef_test
 			/* Overwrite the built-in print(..) method */
 			lua.register(fLuaState, "print", => l_print);
 
-			RunScript();
+			RunScript(TEST_SCRIPT, "World");
 
 			/** Stop the main thread, perform last remaining cleanups and destruct the Lua library **/
 			lua.close(fLuaState);
 
-			Console.WriteLine("\nPress Enter to exit");
+			/*---------------------------------------------------------------------------
+			** Lua from a compiled script with debug symbols
+			*/
+			
+			Console.WriteLine("DEBUG > Running pre-compiled (using luac.exe) LUA script with debug symbols\n");
+			/** Initialize the Lua library and create the main Lua thread **/
+			fLuaState = lauxlib.newstate();
+			PushModules();
+			PushGlobals();
+			/* Overwrite the built-in print(..) method */
+			lua.register(fLuaState, "print", => l_print);
+
+			RunScript(TEST_SCRIPT_COMPILED_DEBUG, " with debug symbols");
+
+			/** Stop the main thread, perform last remaining cleanups and destruct the Lua library **/
+			lua.close(fLuaState);
+
+			/*---------------------------------------------------------------------------
+			** Lua from a compiled script
+			*/
+			
+			Console.WriteLine("DEBUG > Running pre-compiled (using luac.exe) LUA script without debug symbols\n");
+			/** Initialize the Lua library and create the main Lua thread **/
+			fLuaState = lauxlib.newstate();
+			PushModules();
+			PushGlobals();
+			/* Overwrite the built-in print(..) method */
+			lua.register(fLuaState, "print", => l_print);
+
+			RunScript(TEST_SCRIPT_COMPILED, "");
+
+			/** Stop the main thread, perform last remaining cleanups and destruct the Lua library **/
+			lua.close(fLuaState);
+
+			Console.WriteLine("Press Enter to exit");
 			Console.In.Read();
 		}
 
-		private static void RunScript()
+		private static void RunScript(String file, String val)
 		{
 			String errorStr   = new .("Error: ");
 			String scriptFile = new .(fExeDir);
-			scriptFile.AppendF("{}{}", Path.DirectorySeparatorChar, TEST_SCRIPT);
+			scriptFile.AppendF("{}{}", Path.DirectorySeparatorChar, file);
 
 			/* Save ourselves some typing work and just make use of the wonderfull mixins */
 			mixin exit() {
@@ -75,13 +128,19 @@ namespace lua_beef_test
 
 			Console.WriteLine("DEBUG > Found the 'Run' function\n");
 			/** Push a variable onto the stack, this is how we provide arguments for the function we're about to call **/
-			lua.pushstring(fLuaState, "World");
+			lua.pushstring(fLuaState, val.CStr());
 
 			if (lua.pcall(fLuaState, 1, 0, 0) != lua.OK) { // Call the "Run" function
 				errorOut!();
 			}
 			
-			Console.WriteLine("\nDEBUG > 'Run' method ran OK");
+			Console.WriteLine("""
+
+DEBUG > 'Run' method ran OK
+
+<=======================================================================================>
+
+""");
 			exit!();
 		}
 
