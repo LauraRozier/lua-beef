@@ -1,8 +1,6 @@
-// NOTE : If you change this, first clean, then build.
-#define USE_LUA54
-
 using System;
 using System.IO;
+// NOTE: If you undefine USE_LUA54 you will have to clean before rebuilding
 #if USE_LUA54
 	using lua54_beef;
 #else
@@ -24,6 +22,8 @@ namespace lua_beef_test
 		private const String TEST_SCRIPT_COMPILED_DEBUG = "compiledLua_d.53.luac";
 #endif
 
+		private static TestModule _testModule = null ~ if (_ != null) delete _;
+
 		static void Main()
 		{
 			/** Retrieve the exe's directory, Lua's "dofile", "loadfile" and "loadfilex" require a full path **/
@@ -38,14 +38,15 @@ namespace lua_beef_test
 			
 			Console.WriteLine("DEBUG > Running LUA script using run-time compiler\n");
 			/** Initialize the Lua library and create the main Lua thread **/
-			fLuaState = lauxlib.newstate();
-			/* TODO: Custom alloc is broken, needs a working implementation. Throws "EXCEPTION_ACCESS_VIOLATION reading from 0xFFFFFFFF'FFFFFFFF" */
-			//fLuaState = lua.newstate(=> l_alloc, null);
+			//fLuaState = lauxlib.newstate();
+			/** Initialize the Lua library, with custom alloc function, and create the main Lua thread **/
+			fLuaState = lua.newstate(=> l_alloc, null);
 
 			PushModules();
 			PushGlobals();
 			/* Overwrite the built-in print(..) method */
 			lua.register(fLuaState, "print", => l_print);
+			_testModule = new .(fLuaState);
 
 			RunScript(TEST_SCRIPT, "World");
 
@@ -189,20 +190,17 @@ DEBUG > 'Run' method ran OK
 			luautils.PushGlobalString(fLuaState,  "LUA_AUTHORS",         lua.AUTHORS);
 		}
 
-		/* TODO: Custom alloc is broken, needs a working implementation. Throws "EXCEPTION_ACCESS_VIOLATION reading from 0xFFFFFFFF'FFFFFFFF" */
-		private static void* l_alloc(void* ud, void* ptr, int osize, int nsize)
+		/* Fixed with tiny LuaSysUtils static lib */
+		private static void* l_alloc(void* ud, void* ptr, size_t osize, size_t nsize)
 		{
 			if (nsize == 0) {
 				if (ptr != null)
-					Internal.StdFree(ptr);
+					LuaSysUtils.Free(ptr);
 
 				return null;
-			} else {
-				if (ptr != null)
-					Internal.StdFree(ptr);
-
-				return Internal.StdMalloc(nsize);
 			}
+
+			return LuaSysUtils.Realloc(ptr, nsize);
 		}
 
 		private static int l_print(lua_State* L)

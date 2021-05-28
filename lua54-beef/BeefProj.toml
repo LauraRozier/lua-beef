@@ -6,36 +6,44 @@ TargetType = "BeefLib"
 StartupObject = "lua54_beef.Program"
 
 [Configs.Debug.Win32]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x86.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x86/lua54.dll\")"]
 
 [Configs.Debug.Win64]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x64.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/lua54.dll\")"]
 
 [Configs.Debug.Linux64]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/liblua54.so\")"]
 
 [Configs.Release.Win32]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x86.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x86/lua54.dll\")"]
 
 [Configs.Release.Win64]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x64.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/lua54.dll\")"]
 
 [Configs.Release.Linux64]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/liblua54.so\")"]
 
 [Configs.Paranoid.Win32]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x86.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x86/lua54.dll\")"]
 
 [Configs.Paranoid.Win64]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x64.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/lua54.dll\")"]
 
 [Configs.Paranoid.Linux64]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/liblua54.so\")"]
 
 [Configs.Test.Win32]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x86.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x86/lua54.dll\")"]
 
 [Configs.Test.Win64]
+LibPaths = ["$(ProjectDir)/../LuaSysUtils/bin/Release/libLuaSysUtils_x64.a"]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/x64/lua54.dll\")"]
 
 [Configs.Test.Linux64]

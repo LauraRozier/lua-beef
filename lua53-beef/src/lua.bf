@@ -738,7 +738,7 @@ namespace lua53_beef
 		public extern static char8* pushstring(lua_State* L, char8* val);
 		[Import(LIB_DLL), LinkName("lua_pushvfstring")]
 		public extern static char8* pushvfstring(lua_State* L, char8* fmt, va_list argp);
-		[Import(LIB_DLL), LinkName("lua_pushfstring"), CVarArgs]
+		[Import(LIB_DLL), LinkName("lua_pushfstring")]
 		public extern static char8* pushfstring(lua_State* L, char8* fmt, params Object[] args);
 		[Import(LIB_DLL), LinkName("lua_pushcclosure")]
 		public extern static void pushcclosure(lua_State* L, lua_CFunction val, int n);

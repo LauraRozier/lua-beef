@@ -7,27 +7,48 @@ StartupObject = "lua_beef_test.Program"
 
 [Configs.Debug.Win32]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "USE_LUA54"]
 
 [Configs.Debug.Win64]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "USE_LUA54"]
 
 [Configs.Debug.Linux64]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "USE_LUA54"]
 
 [Configs.Release.Win32]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["RELEASE", "USE_LUA54"]
 
 [Configs.Release.Win64]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["RELEASE", "USE_LUA54"]
+
+[Configs.Release.Linux64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["RELEASE", "USE_LUA54"]
 
 [Configs.Paranoid.Win32]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "PARANOID", "USE_LUA54"]
 
 [Configs.Paranoid.Win64]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "PARANOID", "USE_LUA54"]
+
+[Configs.Paranoid.Linux64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["DEBUG", "PARANOID", "USE_LUA54"]
 
 [Configs.Test.Win32]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["TEST", "USE_LUA54"]
 
 [Configs.Test.Win64]
 PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["TEST", "USE_LUA54"]
+
+[Configs.Test.Linux64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(ProjectDir)/assets/test.lua\", \"$(TargetDir)\")", "CopyFilesIfNewer(\"$(ProjectDir)/assets/*.luac\", \"$(TargetDir)\")"]
+PreprocessorMacros = ["TEST", "USE_LUA54"]

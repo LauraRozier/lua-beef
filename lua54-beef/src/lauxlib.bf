@@ -158,7 +158,7 @@ namespace lua54_beef
 
 		[Import(lua.LIB_DLL), LinkName("luaL_where")]
 		public static extern void where_(lua_State* L, int lvl); /* Suffixed with _ to prevent naming collision */
-		[Import(lua.LIB_DLL), LinkName("luaL_error"), CVarArgs]
+		[Import(lua.LIB_DLL), LinkName("luaL_error")]
 		public static extern int error(lua_State* L, char8* fmt, params Object[] args);
 
 		[Import(lua.LIB_DLL), LinkName("luaL_checkoption")]
